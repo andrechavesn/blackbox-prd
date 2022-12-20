@@ -57,7 +57,6 @@ export function Sidebar({ children }: SidebarProps) {
       <Container>
         <Header>
           <TitleBox>
-            <Circle color="var(--white)" />
             <Title>Home</Title>
           </TitleBox>
           <SearchBar />

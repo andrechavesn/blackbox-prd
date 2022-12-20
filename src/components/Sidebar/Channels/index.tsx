@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { Circle } from '../styles';
@@ -13,12 +12,6 @@ import {
 
 export function Channels() {
   const { channels } = useContext(AuthContext);
-  const { push } = useRouter();
-
-  // create a function that get channel name and channel url and   set in the url
-  function handleChannel(channelName: string, channelUrl: string) {
-    push(`/channels/${channelName}/${channelUrl}`);
-  }
 
   return (
     <Container>

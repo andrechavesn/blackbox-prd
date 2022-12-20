@@ -38,7 +38,9 @@ export const Circle = styled.div`
   border-radius: 50%;
   background-color: ${props => props.color};
 `;
-export const Title = styled.h1``;
+export const Title = styled.h1`
+  font-size: 1.5rem;
+`;
 
 export const Content = styled.div`
   height: 60%;

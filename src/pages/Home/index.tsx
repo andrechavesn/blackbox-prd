@@ -6,12 +6,8 @@ export default function Home() {
   const [selectedTitle, setSelectedTitle] = useState('');
   const [selectedChannel, setSelectedChannel] = useState('');
 
-  const handleRequest = (title: string, channel: string) => {
-    setSelectedTitle(title);
-    setSelectedChannel(channel);
-  };
   return (
-    <Sidebar onChannelRequest={() => handleRequest}>
+    <Sidebar>
       <Player title={selectedTitle} selectedChannel={selectedChannel} />
     </Sidebar>
   );
