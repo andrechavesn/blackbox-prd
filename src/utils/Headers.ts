@@ -1,5 +1,4 @@
 export const headers = {
-  authority: 'localhost:51042',
   accept: '/',
   'accept-language': 'en,pt-BR;q=0.9,pt;q=0.8,en-US;q=0.7',
   'cache-control': 'no-cache',
