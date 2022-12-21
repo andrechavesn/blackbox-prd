@@ -19,10 +19,10 @@ export default class MyDocument extends Document {
     return (
       <Html lang="pt-BR">
         <Head>
-          <meta
+          {/* <meta
             httpEquiv="Content-Security-Policy"
             content="upgrade-insecure-requests"
-          />
+          /> */}
 
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
