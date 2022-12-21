@@ -103,7 +103,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
 
       axios
         .post(
-          'http://web-dev.eba-jrk4uvgx.eu-west-1.elasticbeanstalk.com/api/Account',
+          'https://web-dev.eba-jrk4uvgx.eu-west-1.elasticbeanstalk.com/api/Account',
           data,
           {
             headers: {
@@ -149,7 +149,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     if (token) {
       const config = {
         method: 'get',
-        url: 'http://web-dev.eba-jrk4uvgx.eu-west-1.elasticbeanstalk.com/api/Channel',
+        url: 'https://web-dev.eba-jrk4uvgx.eu-west-1.elasticbeanstalk.com/api/Channel',
         headers: {
           Authorization: `Bearer ${token}`,
         },
