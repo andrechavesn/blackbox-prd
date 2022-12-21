@@ -7,7 +7,6 @@ import {
   useState,
 } from 'react';
 import { setCookie, destroyCookie, parseCookies } from 'nookies';
-// eslint-disable-next-line camelcase
 import axios from 'axios';
 
 import Router from 'next/router';
