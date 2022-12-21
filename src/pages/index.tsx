@@ -12,7 +12,7 @@ import { AuthContext } from '../contexts/AuthContext';
 export default function Login() {
   const { register, handleSubmit } = useForm();
   const { signIn, isLoading } = useContext(AuthContext);
-  useEffect(() => {
+  const SignIng = () => {
     const data = new FormData();
     data.append('username', 'andre');
     data.append('password', '123456');
@@ -33,10 +33,11 @@ export default function Login() {
       .catch(function (error) {
         console.log(error);
       });
-  }, []);
+  };
+
   return (
     <Container>
-      <Content onSubmit={handleSubmit(signIn)}>
+      <Content onSubmit={handleSubmit(SignIng)}>
         <Logo src="/assets/logo.svg" alt="Logo" />
         <Input
           register={register}
