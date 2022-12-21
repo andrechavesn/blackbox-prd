@@ -29,9 +29,6 @@ function App({ Component, pageProps }: AppProps) {
               <Component {...pageProps} />
             </Sidebar>
           )}
-          <Sidebar>
-            <Component {...pageProps} />
-          </Sidebar>
         </ChannelProvider>
       </AuthProvider>
     </CacheProvider>
