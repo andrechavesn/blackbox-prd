@@ -109,7 +109,6 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
             headers: {
               'Content-Type': 'multipart/form-data',
               'request-method': 'POST',
-              referrerPolicy: 'unsafe_url',
             },
           },
         )
