@@ -104,7 +104,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
       data.append('password', password);
       const config = {
         method: 'post',
-        url: 'https://web-dev.eba-jrk4uvgx.eu-west-1.elasticbeanstalk.com/api/Account',
+        url: 'http://web-dev.eba-jrk4uvgx.eu-west-1.elasticbeanstalk.com/api/Account',
         headers,
         data,
       };
