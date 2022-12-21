@@ -12,32 +12,17 @@ import { AuthContext } from '../contexts/AuthContext';
 export default function Login() {
   const { register, handleSubmit } = useForm();
   const { signIn, isLoading } = useContext(AuthContext);
-  const SignIng = () => {
-    const data = new FormData();
-    data.append('username', 'andre');
-    data.append('password', '123456');
 
-    const config = {
-      method: 'post',
-      url: 'http://web-dev.eba-jrk4uvgx.eu-west-1.elasticbeanstalk.com/api/Account',
-      headers: {
-        accept: '/',
-      },
-      data,
-    };
-
-    axios(config)
-      .then(function (response) {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
+  useEffect(() => {
+    signIn({
+      username: 'andre',
+      password: 'password',
+    });
+  }, []);
 
   return (
     <Container>
-      <Content onSubmit={handleSubmit(SignIng)}>
+      <Content onSubmit={handleSubmit(signIn)}>
         <Logo src="/assets/logo.svg" alt="Logo" />
         <Input
           register={register}
