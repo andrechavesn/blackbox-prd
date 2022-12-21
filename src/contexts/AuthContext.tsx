@@ -104,7 +104,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
       data.append('password', password);
       const config = {
         method: 'post',
-        url: 'http://web-dev.eba-jrk4uvgx.eu-west-1.elasticbeanstalk.com/api/Account',
+        url: 'https://web-dev.eba-jrk4uvgx.eu-west-1.elasticbeanstalk.com/api/Account',
         headers,
         data,
       };
@@ -146,7 +146,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     if (token) {
       const config = {
         method: 'get',
-        url: 'http://web-dev.eba-jrk4uvgx.eu-west-1.elasticbeanstalk.com/api/Channel',
+        url: 'https://web-dev.eba-jrk4uvgx.eu-west-1.elasticbeanstalk.com/api/Channel',
         headers: {
           Authorization: `Bearer ${token}`,
         },
