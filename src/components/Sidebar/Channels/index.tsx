@@ -1,6 +1,9 @@
+import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import { AuthContext } from '../../../contexts/AuthContext';
+import { ChannelContext } from '../../../contexts/ChannelContext';
 import { Circle } from '../styles';
+
 import {
   Container,
   TitleBox,
@@ -12,6 +15,8 @@ import {
 
 export function Channels() {
   const { channels } = useContext(AuthContext);
+  const { push } = useRouter();
+  const { handleChannel } = useContext(ChannelContext);
 
   return (
     <Container>
@@ -21,9 +26,21 @@ export function Channels() {
       </TitleBox>
       <Content>
         <ChannelsList>
-          {channels?.value.map(channel => (
-            <Channel key={channel.id}>{channel.name}</Channel>
-          ))}
+          {channels ? (
+            channels?.value.map(channel => (
+              <Channel
+                onClick={async () => {
+                  await handleChannel(channel.id);
+                  // push(`/Home/Player/${channel.id}`);
+                }}
+                key={channel.id}
+              >
+                {channel.name}
+              </Channel>
+            ))
+          ) : (
+            <Channel>Carregando...</Channel>
+          )}
         </ChannelsList>
       </Content>
     </Container>

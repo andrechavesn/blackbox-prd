@@ -1,26 +1,12 @@
 import { IoSettings } from 'react-icons/io5';
 import { parseCookies } from 'nookies';
 import jwtDecode from 'jwt-decode';
-import {
-  cloneElement,
-  ReactElement,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { ReactElement, useContext, useEffect, useState } from 'react';
 
 import { Button } from '../Button';
 import { Channels } from './Channels';
 import { SearchBar } from './SearchBar';
-import {
-  Main,
-  Container,
-  Header,
-  TitleBox,
-  Circle,
-  Title,
-  Content,
-} from './styles';
+import { Main, Container, Header, TitleBox, Title, Content } from './styles';
 import { AuthContext } from '../../contexts/AuthContext';
 
 interface SidebarProps {
@@ -63,9 +49,16 @@ export function Sidebar({ children }: SidebarProps) {
         </Header>
         <Content>
           <Channels />
-          {loggedAccount?.primarygroupsid === 'admin' && (
+
+          {loggedAccount ? (
+            loggedAccount?.primarygroupsid === 'admin' && (
+              <Button icon={IoSettings} size="normal" onClick={signOut}>
+                Manager
+              </Button>
+            )
+          ) : (
             <Button icon={IoSettings} size="normal" onClick={signOut}>
-              Manager
+              Settings
             </Button>
           )}
         </Content>

@@ -1,14 +1,5 @@
-import React, { useState } from 'react';
-import { Player } from '../../components/Player';
-import { Sidebar } from '../../components/Sidebar';
+import Player from '../../components/Player';
 
 export default function Home() {
-  const [selectedTitle, setSelectedTitle] = useState('');
-  const [selectedChannel, setSelectedChannel] = useState('');
-
-  return (
-    <Sidebar>
-      <Player title={selectedTitle} selectedChannel={selectedChannel} />
-    </Sidebar>
-  );
+  return <Player />;
 }

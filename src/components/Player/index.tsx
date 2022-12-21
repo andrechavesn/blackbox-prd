@@ -1,38 +1,66 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import OvenPlayer from 'ovenplayer';
+import { useRouter } from 'next/router';
+import { api } from '../../services/api/api';
+import { ChannelContext } from '../../contexts/ChannelContext';
+import { withSSRAuth } from '../../utils/withSSRAuth';
 
-interface PlayerProps {
-  selectedChannel: string;
-  title: string;
-}
-export function Player({ selectedChannel, title }: PlayerProps) {
+export default function Player() {
+  const { handleChannel, channel } = useContext(ChannelContext);
+
+  // useEffect(() => {
+  //   handleChannel(router.query.id as string);
+  // }, [router.query.id, handleChannel]);
+
   useEffect(() => {
-    const player = OvenPlayer.create('player_id', {
-      autoStart: true,
-      autoFallback: true,
-      mute: false,
-      sources: [
-        {
-          type: 'webrtc',
-          file: `${selectedChannel}`,
+    if (channel) {
+      const player = OvenPlayer.create('player_id', {
+        autoStart: true,
+        autoFallback: true,
+        mute: false,
+        sources: [
+          {
+            type: channel ? channel?.value[0].name : '',
+            file: channel ? channel?.value[0].url : '',
+          },
+        ],
+        webrtcConfig: {
+          timeoutMaxRetry: 4,
+          connectionTimeout: 10000,
         },
-      ],
-      webrtcConfig: {
-        timeoutMaxRetry: 4,
-        connectionTimeout: 10000,
-      },
-      waterMark: {
-        text: `1${title}`,
-        font: {
-          'font-size': '20px',
-          color: 'yellow',
-          'font-weight': 'bold',
+        waterMark: {
+          text: channel ? channel.value[0].name : '',
+          font: {
+            'font-size': '20px',
+            color: 'yellow',
+            'font-weight': 'bold',
+          },
+          position: 'top-right',
         },
-        position: 'top-right',
-      },
-    });
-    player.play();
-  }, [selectedChannel, title]);
+      });
+      player.play();
+    }
+  }, [channel]);
 
   return <div id="player_id" />;
 }
+
+// export const getServerSideProps = withSSRAuth(async ctx => {
+//   try {
+//     const { id } = ctx.params;
+
+//     const response = await api.get(`/Channel/${id}`);
+
+//     const channel = {
+//       ...response.data,
+//     };
+//     return {
+//       props: { channel },
+//     };
+//   } catch (err) {
+//     return {
+//       props: {},
+//       notFound: true,
+//     };
+//   }
+// });

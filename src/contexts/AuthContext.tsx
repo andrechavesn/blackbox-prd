@@ -95,31 +95,6 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     }
   }, [signOut]);
 
-  useEffect(() => {
-    const { 'blackbox.token': token } = parseCookies();
-
-    if (token) {
-      const config = {
-        method: 'get',
-        url: 'http://web-dev.eba-jrk4uvgx.eu-west-1.elasticbeanstalk.com/api/Channel',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      axios(config)
-        .then(response => {
-          setChannels(response.data);
-        })
-        .catch(error => {
-          if (error) {
-            toast.error('Erro ao carregar canais');
-          }
-        });
-    } else {
-      signOut();
-    }
-  }, [isAuthenticated, signOut]);
   const signIn = useCallback(async ({ username, password }: ISignInData) => {
     try {
       setIsLoading(true);
@@ -162,6 +137,32 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
       toast.error('Erro ao efetuar login. Verifique suas credenciais.');
     } finally {
       setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    const { 'blackbox.token': token } = parseCookies();
+
+    if (token) {
+      const config = {
+        method: 'get',
+        url: 'http://web-dev.eba-jrk4uvgx.eu-west-1.elasticbeanstalk.com/api/Channel',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      axios(config)
+        .then(response => {
+          setChannels(response.data);
+        })
+        .catch(error => {
+          if (error) {
+            toast.error('Erro ao carregar canais');
+          }
+        });
+    } else {
+      signOut();
     }
   }, []);
 
