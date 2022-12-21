@@ -3,6 +3,7 @@ import { ChannelContext } from '../../contexts/ChannelContext';
 
 export default function Player() {
   const { channel } = useContext(ChannelContext);
+  console.log('🚀 ~ file: index.tsx:6 ~ Player ~ channel', channel);
 
   useEffect(() => {
     const initTerminal = async () => {
@@ -13,8 +14,8 @@ export default function Player() {
         mute: false,
         sources: [
           {
-            type: channel ? channel?.value[0].name : '',
-            file: channel ? channel?.value[0].url : '',
+            type: channel.split('app/')[1],
+            file: channel,
           },
         ],
         webrtcConfig: {
@@ -22,7 +23,7 @@ export default function Player() {
           connectionTimeout: 10000,
         },
         waterMark: {
-          text: channel ? channel.value[0].name : '',
+          text: channel ? channel.split('app/')[1] : '',
           font: {
             'font-size': '20px',
             color: 'yellow',

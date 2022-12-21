@@ -14,8 +14,8 @@ import {
 } from './styles';
 
 export function Channels() {
-  const { channels } = useContext(AuthContext);
-  const { push } = useRouter();
+  // const { channels } = useContext(AuthContext);
+  // const { push } = useRouter();
   const { handleChannel } = useContext(ChannelContext);
 
   return (
@@ -26,7 +26,8 @@ export function Channels() {
       </TitleBox>
       <Content>
         <ChannelsList>
-          {channels ? (
+          {/* <Channel>
+           {channels ? (
             channels?.value.map(channel => (
               <Channel
                 onClick={async () => {
@@ -40,7 +41,28 @@ export function Channels() {
             ))
           ) : (
             <Channel>Carregando...</Channel>
-          )}
+          )}  */}
+          <Channel
+            onClick={() => {
+              handleChannel('wss://stream.black-box.uk:3334/app/squawk');
+            }}
+          >
+            Squawk
+          </Channel>
+          <Channel
+            onClick={() => {
+              handleChannel('wss://stream.black-box.uk:3334/app/reuters');
+            }}
+          >
+            Reuters
+          </Channel>
+          <Channel
+            onClick={() => {
+              handleChannel('wss://stream.black-box.uk:3334/app/platts');
+            }}
+          >
+            Platts
+          </Channel>
         </ChannelsList>
       </Content>
     </Container>
