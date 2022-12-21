@@ -101,16 +101,18 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
       const data = new FormData();
       data.append('username', username);
       data.append('password', password);
-      const config = {
-        method: 'post',
-        url: 'https://web-dev.eba-jrk4uvgx.eu-west-1.elasticbeanstalk.com/api/Account',
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        data,
-      };
 
-      axios(config)
+      await axios
+        .post(
+          'https://web-dev.eba-jrk4uvgx.eu-west-1.elasticbeanstalk.com/api/Account',
+          data,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          },
+        )
+
         .then(response => {
           const { token } = response.data;
 
