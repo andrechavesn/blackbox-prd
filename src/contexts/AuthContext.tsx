@@ -93,7 +93,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     }
   }, [signOut]);
 
-  const signIn = useCallback(async ({ username, password }: ISignInData) => {
+  const signIn = useCallback(({ username, password }: ISignInData) => {
     try {
       setIsLoading(true);
 
@@ -101,7 +101,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
       data.append('username', username);
       data.append('password', password);
 
-      await axios
+      axios
         .post(
           'http://web-dev.eba-jrk4uvgx.eu-west-1.elasticbeanstalk.com/api/Account',
           data,
