@@ -41,7 +41,7 @@ type ChannelProps = {
 };
 
 interface AuthContextData {
-  signIn: (credentials: ISignInData) => Promise<void>;
+  signIn: (credentials: ISignInData) => void;
   signOut: () => Promise<void>;
   channels: ChannelProps;
   isLoading: boolean;
