@@ -19,7 +19,7 @@ export default function Login() {
           name="username"
           type="text"
           icon={IoPerson}
-          placeholder="Nome"
+          placeholder="Name"
         />
         <Input
           register={register}
@@ -27,7 +27,7 @@ export default function Login() {
           name="password"
           type="password"
           icon={IoLockClosed}
-          placeholder="Senha"
+          placeholder="Password"
         />
         <Button type="submit" size="large">
           Login
