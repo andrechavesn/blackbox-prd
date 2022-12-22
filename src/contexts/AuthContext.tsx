@@ -127,17 +127,17 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
 
           api.defaults.headers.common.Authorization = `Bearer ${token}`;
 
-          toast.success('Login efetuado com sucesso! 🚀');
+          toast.success('Successful login! 🚀');
 
           Router.push('/Home');
         })
         .catch(error => {
           if (error) {
-            toast.error('Usuário ou senha inválidos.');
+            toast.error('Wrong credentials.');
           }
         });
     } catch (err) {
-      toast.error('Erro ao efetuar login. Verifique suas credenciais.');
+      toast.error('Login error, check your crendentials.');
     } finally {
       setIsLoading(false);
     }
@@ -161,7 +161,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
         })
         .catch(error => {
           if (error) {
-            toast.error('Erro ao carregar canais');
+            toast.error('Error loading channels');
           }
         });
     } else {
