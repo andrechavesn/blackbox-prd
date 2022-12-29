@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import {
   createContext,
   ReactNode,
@@ -93,81 +94,109 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     }
   }, [signOut]);
 
-  const signIn = useCallback(({ username, password }: ISignInData) => {
-    try {
-      setIsLoading(true);
-
-      const data = new FormData();
-      data.append('username', username);
-      data.append('password', password);
-
-      axios
-        .post(
-          'https://web-dev.eba-jrk4uvgx.eu-west-1.elasticbeanstalk.com/api/Account',
-          data,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              'request-method': 'POST',
-            },
+  const handleAuth = useCallback(
+    (token: any) => {
+      if (token) {
+        const config = {
+          method: 'get',
+          url: 'https://www.black-box.uk/api/Channel',
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        )
+        };
 
-        .then(response => {
-          const { token } = response.data;
+        axios(config)
+          .then(async response => {
+            const value = JSON.stringify(await response.data);
 
-          setCookie(undefined, 'blackbox.token', token, {
-            maxAge: 60 * 60 * 24 * 30, // 30 days
-            path: '/',
+            setCookie(undefined, 'channels.cookie', value, {
+              maxAge: 60 * 60 * 24 * 30, // 30 days
+              path: '/',
+            });
+
+            const { 'channels.cookie': channelsCookies } = parseCookies();
+
+            setChannels(JSON.parse(channelsCookies));
+          })
+          .catch(error => {
+            if (error) {
+              toast.error('Error loading channels');
+            }
           });
-
-          const account: JwtProps = jwtDecode(token);
-
-          setLoggedAccount(account);
-
-          api.defaults.headers.common.Authorization = `Bearer ${token}`;
-
-          toast.success('Login efetuado com sucesso! 🚀');
-
-          Router.push('/Home');
-        })
-        .catch(error => {
-          if (error) {
-            toast.error('Usuário ou senha inválidos.');
-          }
-        });
-    } catch (err) {
-      toast.error('Erro ao efetuar login. Verifique suas credenciais.');
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+      } else {
+        signOut();
+      }
+    },
+    [signOut],
+  );
 
   useEffect(() => {
     const { 'blackbox.token': token } = parseCookies();
 
     if (token) {
-      const config = {
-        method: 'get',
-        url: 'https://web-dev.eba-jrk4uvgx.eu-west-1.elasticbeanstalk.com/api/Channel',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
+      const { 'channels.cookie': channelsCookies } = parseCookies();
 
-      axios(config)
-        .then(response => {
-          setChannels(response.data);
-        })
-        .catch(error => {
-          if (error) {
-            toast.error('Erro ao carregar canais');
-          }
-        });
+      setChannels(JSON.parse(channelsCookies));
+
+      const account: JwtProps = jwtDecode(token);
+
+      setLoggedAccount(account);
     } else {
+      setLoggedAccount(undefined);
       signOut();
     }
   }, []);
+
+  const signIn = useCallback(
+    ({ username, password }: ISignInData) => {
+      try {
+        setIsLoading(true);
+
+        const data = new FormData();
+        data.append('username', username);
+        data.append('password', password);
+
+        api
+          .post('/Account', data, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'request-method': 'POST',
+            },
+          })
+
+          .then(async response => {
+            const { token, expires_in } = await response.data;
+
+            setCookie(undefined, 'blackbox.token', token, {
+              maxAge: expires_in, // 30 days
+              path: '/',
+            });
+
+            api.defaults.headers.common.Authorization = `Bearer ${token}`;
+
+            const account: JwtProps = await jwtDecode(token);
+
+            handleAuth(token);
+
+            setLoggedAccount(account);
+
+            toast.success('Login efetuado com sucesso! 🚀');
+
+            Router.push('/Home');
+          })
+          .catch(error => {
+            if (error) {
+              toast.error('Usuário ou senha inválidos.');
+            }
+          });
+      } catch (err) {
+        toast.error('Erro ao efetuar login. Verifique suas credenciais.');
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [handleAuth],
+  );
 
   const authContextData: AuthContextData = useMemo(
     () => ({

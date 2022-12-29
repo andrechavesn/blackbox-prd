@@ -25,19 +25,8 @@ type AccountProps = {
 export function Sidebar({ children }: SidebarProps) {
   const [loggedAccount, setLoggedAccount] = useState<AccountProps>();
 
-  const { signOut } = useContext(AuthContext);
+  const { signOut, account } = useContext(AuthContext);
 
-  const { 'blackbox.token': token } = parseCookies();
-
-  useEffect(() => {
-    if (token) {
-      jwtDecode(token);
-
-      const account: AccountProps = jwtDecode(token);
-
-      setLoggedAccount(account);
-    }
-  }, [token]);
   return (
     <Main>
       <Container>
@@ -50,8 +39,8 @@ export function Sidebar({ children }: SidebarProps) {
         <Content>
           <Channels />
 
-          {loggedAccount ? (
-            loggedAccount?.primarygroupsid === 'admin' && (
+          {account ? (
+            account?.primarygroupsid === 'admin' && (
               <Button icon={IoSettings} size="normal" onClick={signOut}>
                 Manager
               </Button>

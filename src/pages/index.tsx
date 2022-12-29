@@ -1,17 +1,19 @@
 import { IoPerson, IoLockClosed } from 'react-icons/io5';
 import { useForm } from 'react-hook-form';
 
-import { useRouter } from 'next/router';
+import { useContext } from 'react';
 import { Container, Content, Logo } from '../../shared/login.styles';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
+import { AuthContext } from '../contexts/AuthContext';
 
 export default function Login() {
   const { register, handleSubmit } = useForm();
-  const { push } = useRouter();
+  const { signIn } = useContext(AuthContext);
+
   return (
     <Container>
-      <Content onSubmit={handleSubmit(() => push('/Home'))}>
+      <Content onSubmit={handleSubmit(signIn)}>
         <Logo src="/assets/logo.svg" alt="Logo" />
         <Input
           register={register}
