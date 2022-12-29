@@ -1,7 +1,5 @@
 import { IoSettings } from 'react-icons/io5';
-import { parseCookies } from 'nookies';
-import jwtDecode from 'jwt-decode';
-import { ReactElement, useContext, useEffect, useState } from 'react';
+import { ReactElement, useContext } from 'react';
 
 import { Button } from '../Button';
 import { Channels } from './Channels';
@@ -13,18 +11,7 @@ interface SidebarProps {
   children: ReactElement;
 }
 
-type AccountProps = {
-  exp: number;
-  iat: number;
-  nbf: number;
-  id: string;
-  username: string;
-  primarygroupsid: string;
-};
-
 export function Sidebar({ children }: SidebarProps) {
-  const [loggedAccount, setLoggedAccount] = useState<AccountProps>();
-
   const { signOut, account } = useContext(AuthContext);
 
   return (
