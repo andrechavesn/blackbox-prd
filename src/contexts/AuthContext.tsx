@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable camelcase */
 import {
   createContext,
@@ -45,7 +46,6 @@ interface AuthContextData {
   signIn: (credentials: ISignInData) => void;
   signOut: () => Promise<void>;
   channels: ChannelProps;
-  isLoading: boolean;
   isAuthenticated: boolean;
   account: Account;
 }
@@ -60,7 +60,6 @@ let authChannel: BroadcastChannel;
 
 export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
   const [loggedAccount, setLoggedAccount] = useState<Account>();
-  const [isLoading, setIsLoading] = useState(false);
   const [channels, setChannels] = useState<ChannelProps>();
   const isAuthenticated = !!loggedAccount;
 
@@ -79,6 +78,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
   useEffect(() => {
     try {
       authChannel = new BroadcastChannel('auth');
+
       authChannel.onmessage = message => {
         switch (message.data) {
           case 'signOut':
@@ -147,19 +147,19 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
   const signIn = useCallback(
     ({ username, password }: ISignInData) => {
       try {
-        setIsLoading(true);
-
-        const data = new FormData();
-        data.append('username', username);
-        data.append('password', password);
-
         api
-          .post('/Account', data, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              'request-method': 'POST',
+          .post(
+            '/Account',
+            {
+              username,
+              password,
             },
-          })
+            {
+              headers: {
+                'request-method': 'POST',
+              },
+            },
+          )
 
           .then(async response => {
             const { token, expires_in } = await response.data;
@@ -177,19 +177,17 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
 
             setLoggedAccount(account);
 
-            toast.success('Login efetuado com sucesso! 🚀');
+            toast.success('Successful login! 🚀');
 
             Router.push('/Home');
           })
           .catch(error => {
             if (error) {
-              toast.error('Usuário ou senha inválidos.');
+              toast.error('Wrong crendentials.');
             }
           });
       } catch (err) {
-        toast.error('Erro ao efetuar login. Verifique suas credenciais.');
-      } finally {
-        setIsLoading(false);
+        toast.error('Oops! Something get wrong.');
       }
     },
     [handleAuth],
@@ -199,12 +197,11 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     () => ({
       signIn,
       signOut,
-      isLoading,
       isAuthenticated,
       account: loggedAccount,
       channels,
     }),
-    [signIn, signOut, isLoading, isAuthenticated, loggedAccount, channels],
+    [signIn, signOut, isAuthenticated, loggedAccount, channels],
   );
 
   return (

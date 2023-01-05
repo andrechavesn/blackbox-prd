@@ -8,13 +8,13 @@ export const Main = styled.section`
 
   background-color: var(--white);
   color: var(--black);
+
+  position: fixed;
 `;
 
 export const Container = styled.aside`
   width: 250px;
   height: 100vh;
-
-  padding: 16px;
 
   background-color: var(--black);
 
@@ -23,12 +23,20 @@ export const Container = styled.aside`
   align-items: center;
   gap: 80px;
 
+  padding: 16px;
+
   color: var(--white);
 `;
-export const Header = styled.header``;
+export const Header = styled.header`
+  width: 100%;
+`;
 export const TitleBox = styled.div`
   display: flex;
+  width: 100%;
+
   align-items: center;
+
+  justify-content: space-between;
   gap: 8px;
 `;
 export const Circle = styled.div`
@@ -43,9 +51,12 @@ export const Title = styled.h1`
 `;
 
 export const Content = styled.div`
-  height: 60%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+`;
+
+export const Logo = styled.img`
+  width: 120px;
 `;

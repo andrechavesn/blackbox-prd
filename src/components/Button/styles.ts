@@ -3,7 +3,13 @@ import { media } from '../../../shared/styles';
 
 interface ContainerProps {
   size?: 'small' | 'normal' | 'large';
+
+  style?: {
+    color?: string;
+    bgColor?: string;
+  };
 }
+
 export const Container = styled.div<ContainerProps>`
   width: ${props =>
     props.size === 'normal'
@@ -13,23 +19,23 @@ export const Container = styled.div<ContainerProps>`
       : '160px'};
   height: 40px;
 
-  background-color: var(--white);
+  background-color: ${props => props.style.bgColor || 'var(--white)'};
   border-radius: 6px;
 
   font-weight: bold;
   font-size: 1.2rem;
-  color: var(--black);
+  color: ${props => props.style.color || 'var(--black)'};
 
   cursor: pointer;
 
   transition: 0.3s;
 
   &:hover {
-    background-color: rgba(247, 247, 247, 0.85);
+    backdrop-filter: brightness(0.9);
   }
 
   &:active {
-    background-color: rgba(247, 247, 247, 0.68);
+    backdrop-filter: brightness(0.8);
   }
 
   ${media.maxMobile} {

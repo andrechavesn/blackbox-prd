@@ -1,11 +1,15 @@
 import styled from '@emotion/styled';
 import { media } from '../../../shared/styles';
 
-export const Container = styled.div`
+interface ContainerProps {
+  bgColor?: string;
+}
+
+export const Container = styled.div<ContainerProps>`
   display: flex;
   align-items: center;
 
-  background-color: var(--gray);
+  background-color: ${props => props.bgColor || 'var(--gray)'};
 
   width: 352px;
   height: 40px;

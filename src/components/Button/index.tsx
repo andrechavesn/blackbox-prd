@@ -7,17 +7,29 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   icon?: ComponentType<IconBaseProps>;
   isLoading?: boolean;
   size?: 'small' | 'normal' | 'large';
+
+  style?: {
+    color?: string;
+    bgColor?: string;
+  };
 }
 
 export function Button({
   icon: Icon,
+  style,
   children,
   isLoading,
   size = 'normal',
   ...rest
 }: ButtonProps) {
   return (
-    <Container size={size}>
+    <Container
+      size={size}
+      style={{
+        color: style?.color,
+        backgroundColor: style?.bgColor,
+      }}
+    >
       {Icon ? (
         <ButtonBase {...rest}>
           <IconBox>

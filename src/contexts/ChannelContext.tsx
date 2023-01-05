@@ -5,46 +5,56 @@ import { api } from '../services/api/api';
 
 interface ChannelContextData {
   handleChannel: (channelId: string) => Promise<void>;
-  channel: Channel;
+  channel: ChannelProps;
 }
 
 type ChannelProviderProps = {
   children: ReactNode;
 };
 
-interface Channel {
-  value: {
-    id: string;
-    name: string;
-    url: string;
-  };
-}
+export type FormProps = {
+  name: string;
+  url: string;
+};
+
+export type ChannelProps = {
+  value: [
+    {
+      id: string;
+      name: string;
+      url: string;
+    },
+  ];
+};
 
 export const ChannelContext = createContext({} as ChannelContextData);
 
 export function ChannelProvider({
   children,
 }: ChannelProviderProps): JSX.Element {
-  const [channel, setChannel] = useState<Channel>();
+  const [channel, setChannel] = useState<ChannelProps>();
 
-  const handleChannel = async (channelId: string) => {
-    try {
-      const response = await api.get(`/Channel/${channelId}`);
+  const handleChannel = useMemo(
+    () => async (channelId: string) => {
+      try {
+        const response = await api.get(`/Channel/${channelId}`);
 
-      setChannel(response.data);
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        toast.error(error.response.data.message);
+        setChannel(response.data);
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          toast.error(error.response.data.message);
+        }
       }
-    }
-  };
+    },
+    [],
+  );
 
   const channelContextData = useMemo(
     () => ({
       handleChannel,
       channel,
     }),
-    [channel],
+    [channel, handleChannel],
   );
 
   return (

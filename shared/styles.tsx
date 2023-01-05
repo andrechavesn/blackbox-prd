@@ -45,6 +45,8 @@ export const globalStyles = (
         --dark: #060606;
 
         --gray: rgba(255, 255, 255, 0.3);
+
+        --red: #ff0000;
       }
 
       @keyframes loading {

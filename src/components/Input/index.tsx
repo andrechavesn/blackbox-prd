@@ -4,7 +4,7 @@ import { IconBaseProps } from 'react-icons';
 import { Container, InputBase } from './styles';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  icon: ComponentType<IconBaseProps>;
+  icon?: ComponentType<IconBaseProps>;
   register: UseFormRegister<FieldValues>;
 }
 

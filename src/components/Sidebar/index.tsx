@@ -1,18 +1,24 @@
-import { IoSettings } from 'react-icons/io5';
-import { ReactElement, useContext } from 'react';
-
-import { Button } from '../Button';
+import { ReactElement, useContext, useState } from 'react';
 import { Channels } from './Channels';
-import { SearchBar } from './SearchBar';
-import { Main, Container, Header, TitleBox, Title, Content } from './styles';
+import {
+  Main,
+  Container,
+  Header,
+  TitleBox,
+  Title,
+  Content,
+  Logo,
+} from './styles';
 import { AuthContext } from '../../contexts/AuthContext';
+import { Switch } from '../Switch';
 
 interface SidebarProps {
   children: ReactElement;
 }
 
 export function Sidebar({ children }: SidebarProps) {
-  const { signOut, account } = useContext(AuthContext);
+  const { account } = useContext(AuthContext);
+  const [isSwitchOn, setIsSwitchOn] = useState(false);
 
   return (
     <Main>
@@ -20,24 +26,19 @@ export function Sidebar({ children }: SidebarProps) {
         <Header>
           <TitleBox>
             <Title>Home</Title>
+
+            {/* {account && account?.primarygroupsid === 'admin' && (
+              <Switch
+                isOn={isSwitchOn}
+                onChangeRequest={() => setIsSwitchOn(!isSwitchOn)}
+              />
+            )} */}
           </TitleBox>
-          <SearchBar />
         </Header>
         <Content>
-          <Channels />
-
-          {account ? (
-            account?.primarygroupsid === 'admin' && (
-              <Button icon={IoSettings} size="normal" onClick={signOut}>
-                Manager
-              </Button>
-            )
-          ) : (
-            <Button icon={IoSettings} size="normal" onClick={signOut}>
-              Settings
-            </Button>
-          )}
+          <Channels adminMode={isSwitchOn} />
         </Content>
+        <Logo src="/assets/logo.svg" />
       </Container>
       {children}
     </Main>
