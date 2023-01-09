@@ -11,6 +11,7 @@ import {
 } from './styles';
 import { AuthContext } from '../../contexts/AuthContext';
 import { Switch } from '../Switch';
+import { MenuButton } from '../MenuButton';
 
 interface SidebarProps {
   children: ReactElement;
@@ -19,26 +20,32 @@ interface SidebarProps {
 export function Sidebar({ children }: SidebarProps) {
   const { account } = useContext(AuthContext);
   const [isSwitchOn, setIsSwitchOn] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <Main>
-      <Container>
-        <Header>
-          <TitleBox>
-            <Title>Home</Title>
+      <Container isOpen={isOpen}>
+        <MenuButton handleClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
+        {!!isOpen && (
+          <>
+            <Header>
+              <TitleBox>
+                <Title>Home</Title>
 
-            {/* {account && account?.primarygroupsid === 'admin' && (
-              <Switch
-                isOn={isSwitchOn}
-                onChangeRequest={() => setIsSwitchOn(!isSwitchOn)}
-              />
-            )} */}
-          </TitleBox>
-        </Header>
-        <Content>
-          <Channels adminMode={isSwitchOn} />
-        </Content>
-        <Logo src="/assets/logo.svg" />
+                {account && account?.primarygroupsid === 'admin' && (
+                  <Switch
+                    isOn={isSwitchOn}
+                    onChangeRequest={() => setIsSwitchOn(!isSwitchOn)}
+                  />
+                )}
+              </TitleBox>
+            </Header>
+            <Content>
+              <Channels adminMode={isSwitchOn} />
+            </Content>
+            <Logo src="/assets/logo.svg" />
+          </>
+        )}
       </Container>
       {children}
     </Main>

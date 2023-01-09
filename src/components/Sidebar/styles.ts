@@ -1,5 +1,9 @@
 import styled from '@emotion/styled';
 
+interface SidebarProps {
+  isOpen: boolean;
+}
+
 export const Main = styled.section`
   width: 100vw;
   max-height: 100vh;
@@ -12,16 +16,18 @@ export const Main = styled.section`
   position: fixed;
 `;
 
-export const Container = styled.aside`
-  width: 250px;
+export const Container = styled.aside<SidebarProps>`
+  width: ${props => (props.isOpen ? '250px' : '32px')};
   height: 100vh;
+
+  transition: width 0.5s ease-in-out;
 
   background-color: var(--black);
 
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 80px;
+  gap: 64px;
 
   padding: 16px;
 
@@ -29,6 +35,7 @@ export const Container = styled.aside`
 `;
 export const Header = styled.header`
   width: 100%;
+  padding-top: 32px;
 `;
 export const TitleBox = styled.div`
   display: flex;
@@ -36,8 +43,8 @@ export const TitleBox = styled.div`
 
   align-items: center;
 
-  justify-content: space-between;
-  gap: 8px;
+  gap: 56px;
+  transition: 0.5s ease-in-out;
 `;
 export const Circle = styled.div`
   width: 12px;
