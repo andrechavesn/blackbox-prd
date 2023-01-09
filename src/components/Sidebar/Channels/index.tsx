@@ -42,7 +42,6 @@ export function Channels({ adminMode }: { adminMode: boolean }) {
                   }}
                   adminMode={adminMode}
                   onClick={async () => {
-                    if (adminMode) return;
                     await handleChannel(channel?.id);
                   }}
                   key={channel.id}

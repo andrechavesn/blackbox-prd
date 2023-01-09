@@ -1,4 +1,5 @@
 import { AxiosError } from 'axios';
+import { parseCookies } from 'nookies';
 import { createContext, ReactNode, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { api } from '../services/api/api';
@@ -37,7 +38,12 @@ export function ChannelProvider({
   const handleChannel = useMemo(
     () => async (channelId: string) => {
       try {
-        const response = await api.get(`/Channel/${channelId}`);
+        const { 'blackbox.token': token } = parseCookies();
+        const response = await api.get(`/Channel/${channelId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         setChannel(response.data);
       } catch (error) {
