@@ -533,7 +533,7 @@ function ResponsiveDialog({
             <Mui.DialogContentText
               sx={{
                 color: 'var(--gray)',
-                padding: '8px 0px',
+                padding: '16px',
                 textAlign: 'center',
               }}
             >
