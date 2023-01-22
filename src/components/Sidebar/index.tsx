@@ -8,10 +8,13 @@ import {
   Title,
   Content,
   Logo,
+  ButtonsBox,
 } from './styles';
 import { AuthContext } from '../../contexts/AuthContext';
 import { Switch } from '../Switch';
 import { MenuButton } from '../MenuButton';
+import { NewUserButton } from '../NewUserButton';
+import { UsersModal } from '../UsersModal';
 
 interface SidebarProps {
   children: ReactElement;
@@ -20,6 +23,7 @@ interface SidebarProps {
 export function Sidebar({ children }: SidebarProps) {
   const { account } = useContext(AuthContext);
   const [isSwitchOn, setIsSwitchOn] = useState(false);
+  const [createUser, setCreateUser] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -33,15 +37,26 @@ export function Sidebar({ children }: SidebarProps) {
                 <Title>Home</Title>
 
                 {account && account?.primarygroupsid === 'admin' && (
-                  <Switch
-                    isOn={isSwitchOn}
-                    onChangeRequest={() => setIsSwitchOn(!isSwitchOn)}
-                  />
+                  <ButtonsBox>
+                    <Switch
+                      isOn={isSwitchOn}
+                      onChangeRequest={() => setIsSwitchOn(!isSwitchOn)}
+                    />
+
+                    <NewUserButton
+                      isOn={createUser}
+                      onChangeRequest={() => setCreateUser(!createUser)}
+                    />
+                  </ButtonsBox>
                 )}
               </TitleBox>
             </Header>
             <Content>
               <Channels adminMode={isSwitchOn} />
+              <UsersModal
+                isOpen={createUser}
+                onCloseRequest={() => setCreateUser(false)}
+              />
             </Content>
             <Logo src="/assets/logo.svg" />
           </>

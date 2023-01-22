@@ -98,7 +98,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     if (token) {
       const config = {
         method: 'get',
-        url: 'https://www.black-box.uk/api/Channel',
+        url: 'https://www.black-box.uk/api/Channel/all',
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -106,16 +106,9 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
 
       axios(config)
         .then(async response => {
-          const value = JSON.stringify(await response.data);
+          const value = await response.data;
 
-          setCookie(undefined, 'channels.cookie', value, {
-            maxAge: 60 * 60 * 24 * 30, // 30 days
-            path: '/',
-          });
-
-          const { 'channels.cookie': channelsCookies } = parseCookies();
-
-          setChannels(JSON.parse(channelsCookies));
+          setChannels(value);
         })
         .catch(error => {
           if (error) {
@@ -131,10 +124,6 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     const { 'blackbox.token': token } = parseCookies();
 
     if (token) {
-      const { 'channels.cookie': channelsCookies } = parseCookies();
-
-      setChannels(JSON.parse(channelsCookies));
-
       const account: JwtProps = jwtDecode(token);
 
       setLoggedAccount(account);
@@ -149,7 +138,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
       try {
         api
           .post(
-            '/Account',
+            '/Account/login',
             {
               username,
               password,

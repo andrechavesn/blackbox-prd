@@ -41,8 +41,6 @@ export const TitleBox = styled.div`
   display: flex;
   width: 100%;
 
-  align-items: center;
-
   gap: 56px;
   transition: 0.5s ease-in-out;
 `;
@@ -66,4 +64,13 @@ export const Content = styled.div`
 
 export const Logo = styled.img`
   width: 120px;
+`;
+
+export const ButtonsBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+
+  padding-top: 24px;
 `;

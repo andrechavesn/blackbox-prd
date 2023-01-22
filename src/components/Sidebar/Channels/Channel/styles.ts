@@ -6,6 +6,7 @@ interface ContainerProps {
 
 export const Container = styled.span<ContainerProps>`
   padding: 12px;
+  min-height: 24px;
   border: 1px solid var(--white);
 
   cursor: pointer;
