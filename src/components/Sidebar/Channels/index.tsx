@@ -29,7 +29,7 @@ export function Channels({ adminMode }: ChannelsProps) {
 
   const refetch = useCallback(async () => {
     try {
-      const response = await api.get('/Channel/all', {
+      const response = await api.get('/Channel', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -43,7 +43,7 @@ export function Channels({ adminMode }: ChannelsProps) {
   useEffect(() => {
     const apiCall = async () => {
       try {
-        const response = await api.get('/Channel/all', {
+        const response = await api.get('/Channel', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
