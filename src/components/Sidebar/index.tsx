@@ -1,6 +1,5 @@
 import { ReactElement, useContext, useState } from 'react';
 import * as Mui from '@mui/material';
-import { useRouter } from 'next/router';
 import { Channels } from './Channels';
 import {
   Main,
@@ -15,7 +14,6 @@ import {
 import { AuthContext } from '../../contexts/AuthContext';
 import { Switch } from '../Switch';
 import { MenuButton } from '../MenuButton';
-import { UsersModal } from '../UsersModal';
 
 interface SidebarProps {
   children: ReactElement;
@@ -24,9 +22,7 @@ interface SidebarProps {
 export function Sidebar({ children }: SidebarProps) {
   const { account } = useContext(AuthContext);
   const [isSwitchOn, setIsSwitchOn] = useState(false);
-  const [createUser, setCreateUser] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const { push } = useRouter();
 
   return (
     <Main>

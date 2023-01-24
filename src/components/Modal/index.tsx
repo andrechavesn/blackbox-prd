@@ -5,7 +5,7 @@ import * as Mui from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { parseCookies } from 'nookies';
 import { toast } from 'react-toastify';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { api } from '../../services/api/api';
 import { RoleSelect } from '../RoleSelect';
 
