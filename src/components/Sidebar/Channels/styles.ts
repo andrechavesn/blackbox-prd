@@ -6,6 +6,9 @@ interface TitleBoxProps {
 export const Container = styled.section`
   display: flex;
   flex-direction: column;
+  height: 180px;
+  overflow-y: auto;
+  position: relative;
 `;
 export const TitleBox = styled.div<TitleBoxProps>`
   background-color: var(--white);

@@ -27,7 +27,7 @@ export const Container = styled.aside<SidebarProps>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 64px;
+  gap: 48px;
 
   padding: 16px;
 

@@ -21,7 +21,7 @@ type Users = {
   password?: string;
 };
 
-export function UsersModal({ isOpen, onCloseRequest }: UsersModalProps) {
+export function UsersModal() {
   const [createUser, setCreateUser] = useState(false);
   const [users, setUsers] = useState<Users[]>();
   const { 'blackbox.token': token } = parseCookies();
@@ -61,57 +61,55 @@ export function UsersModal({ isOpen, onCloseRequest }: UsersModalProps) {
     }
   }, []);
   return (
-    <Mui.Box>
-      <Mui.Dialog
+    <Mui.Box
+      sx={{
+        backgroundColor: 'var(--black)',
+        color: 'var(--white)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+      // open={isOpen}
+      // onClose={onCloseRequest}
+      // // onSubmit={handleSubmit(handleUpdate)}
+      // aria-labelledby="responsive-dialog-title"
+    >
+      <Mui.Box
         sx={{
-          '& .MuiDialog-paper': {
-            backgroundColor: 'var(--black)',
-            color: 'var(--white)',
+          backgroundColor: 'var(--primary)',
+          color: 'var(--white)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          paddingRight: '16px',
+          cursor: 'pointer',
+
+          '& svg': {
+            '&:hover': {
+              transition: '0.2s',
+              color: 'var(--gray)',
+              transform: 'scale(1.2)',
+            },
           },
         }}
-        open={isOpen}
-        onClose={onCloseRequest}
-        // onSubmit={handleSubmit(handleUpdate)}
-        aria-labelledby="responsive-dialog-title"
       >
-        <Mui.Box
-          sx={{
-            backgroundColor: 'var(--primary)',
-            color: 'var(--white)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            paddingRight: '16px',
-            cursor: 'pointer',
-
-            '& svg': {
-              '&:hover': {
-                transition: '0.2s',
-                color: 'var(--gray)',
-                transform: 'scale(1.2)',
-              },
-            },
-          }}
-        >
-          <Mui.DialogTitle id="responsive-dialog-title">Users</Mui.DialogTitle>
-          <IoAdd size={24} onClick={() => setCreateUser(true)} />
-        </Mui.Box>
-        <Mui.DialogContent>
-          <Mui.DialogContentText>
-            <Users refetch={refetch} users={users} />
-          </Mui.DialogContentText>
-        </Mui.DialogContent>
-        <Mui.DialogActions />
-      </Mui.Dialog>
-      <Modal
-        refetch={refetch}
-        isOpen={createUser}
-        content="Do you want to create a new user?"
-        onCloseRequest={() => {
-          setCreateUser(false);
-        }}
-        fn="createUser"
-      />
+        <Mui.TextField id="responsive-dialog-title">Users</Mui.TextField>
+        <IoAdd size={24} onClick={() => setCreateUser(true)} />
+        <Mui.TextField>
+          <Users refetch={refetch} users={users} />
+        </Mui.TextField>
+      </Mui.Box>
     </Mui.Box>
+
+    // <Modal
+    //   refetch={refetch}
+    //   isOpen={createUser}
+    //   content="Do you want to create a new user?"
+    //   onCloseRequest={() => {
+    //     setCreateUser(false);
+    //   }}
+    //   fn="createUser"
+    // />
   );
 }

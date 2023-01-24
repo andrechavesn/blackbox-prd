@@ -5,8 +5,9 @@ import * as Mui from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { parseCookies } from 'nookies';
 import { toast } from 'react-toastify';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { api } from '../../services/api/api';
+import { RoleSelect } from '../RoleSelect';
 
 type Roles = {
   id?: string;
@@ -40,8 +41,37 @@ interface FormData {
   url?: string;
   password?: string;
   roleId?: string;
+  channelId?: string;
+  userId?: string;
 }
 
+export const inputStyle = {
+  '& .MuiButtonBase-root': {
+    backgroundColor: '#cfcfcf',
+  },
+  '& .MuiOutlinedInput-input': {
+    color: 'var(--white)',
+  },
+  '& .MuiInputLabel-root': {
+    color: 'var(--gray)',
+  },
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: 'var(--white)',
+    },
+    '&:hover fieldset': {
+      borderColor: 'var(--white)',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: 'var(--white)',
+      color: 'var(--white)',
+
+      '& .MuiOutlinedInput-input': {
+        color: 'var(--white)',
+      },
+    },
+  },
+};
 function ResponsiveDialog({
   isOpen,
   onCloseRequest,
@@ -53,38 +83,15 @@ function ResponsiveDialog({
   refetch,
 }: ResponsiveDialogProps) {
   const [roles, setRoles] = useState<Roles[]>([]);
+  const { handleSubmit, register } = useForm();
 
-  const inputStyle = {
-    '& .MuiOutlinedInput-input': {
-      color: 'var(--white)',
-    },
-    '& .MuiInputLabel-root': {
-      color: 'var(--gray)',
-    },
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-        borderColor: 'var(--white)',
-      },
-      '&:hover fieldset': {
-        borderColor: 'var(--white)',
-      },
-      '&.Mui-focused fieldset': {
-        borderColor: 'var(--white)',
-        color: 'var(--white)',
+  const { 'blackbox.token': token } = parseCookies();
 
-        '& .MuiOutlinedInput-input': {
-          color: 'var(--white)',
-        },
-      },
-    },
-  };
   useEffect(() => {
     const handleRoles = async () => {
       if (fn === 'createUser' || fn === 'updateUser') {
-        const { 'blackbox.token': token } = parseCookies();
-
         try {
-          const response = await api.get('/Account/roles', {
+          const response = await api.get('/Account/Roles', {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -103,10 +110,6 @@ function ResponsiveDialog({
     handleRoles();
   }, [fn === 'createUser' || fn === 'updateUser']);
 
-  const { handleSubmit, register } = useForm();
-
-  const { 'blackbox.token': token } = parseCookies();
-
   const updateUser = async (data: FormData) => {
     try {
       const response = await api.put(
@@ -123,10 +126,13 @@ function ResponsiveDialog({
           },
         },
       );
+      console.log('🚀 ~ file: index.tsx:139 ~ updateUser ~ userId', userId);
+
       if (response.status === 200) {
         toast.success('User updated successfully! 🚀');
         onCloseRequest();
         refetch();
+        console.log('🚀 ~ file: index.tsx:130 ~ updateUser ~ data', data);
       }
     } catch (error) {
       toast.error(error?.response.data.errors[0]);
@@ -485,6 +491,7 @@ function ResponsiveDialog({
               type="password"
               defaultValue={initialValues?.password}
             />
+            <RoleSelect userId={userId} />
             <Mui.RadioGroup
               sx={{
                 '& .MuiRadio-root': {

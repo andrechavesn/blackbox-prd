@@ -43,14 +43,14 @@ export function Channels({ adminMode }: ChannelsProps) {
   useEffect(() => {
     const apiCall = async () => {
       try {
-        const response = await api.get('/Channel', {
+        const response = await api.get('/Channel/all', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         setChannels(response?.data);
       } catch (error) {
-        toast.error(error?.response.data.errors[0]);
+        toast.error(error.message);
       }
     };
     apiCall();

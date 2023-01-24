@@ -1,4 +1,6 @@
 import { ReactElement, useContext, useState } from 'react';
+import * as Mui from '@mui/material';
+import { useRouter } from 'next/router';
 import { Channels } from './Channels';
 import {
   Main,
@@ -13,7 +15,6 @@ import {
 import { AuthContext } from '../../contexts/AuthContext';
 import { Switch } from '../Switch';
 import { MenuButton } from '../MenuButton';
-import { NewUserButton } from '../NewUserButton';
 import { UsersModal } from '../UsersModal';
 
 interface SidebarProps {
@@ -25,6 +26,7 @@ export function Sidebar({ children }: SidebarProps) {
   const [isSwitchOn, setIsSwitchOn] = useState(false);
   const [createUser, setCreateUser] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const { push } = useRouter();
 
   return (
     <Main>
@@ -42,22 +44,33 @@ export function Sidebar({ children }: SidebarProps) {
                       isOn={isSwitchOn}
                       onChangeRequest={() => setIsSwitchOn(!isSwitchOn)}
                     />
-
-                    <NewUserButton
-                      isOn={createUser}
-                      onChangeRequest={() => setCreateUser(!createUser)}
-                    />
                   </ButtonsBox>
                 )}
               </TitleBox>
             </Header>
             <Content>
               <Channels adminMode={isSwitchOn} />
-              <UsersModal
-                isOpen={createUser}
-                onCloseRequest={() => setCreateUser(false)}
-              />
             </Content>
+            <Mui.Link
+              href="/Users"
+              sx={{
+                textDecoration: 'none',
+              }}
+            >
+              <Mui.Button
+                variant="contained"
+                color="success"
+                sx={{
+                  color: 'white',
+                  fontSize: '0.6rem',
+                  backgroundColor: 'var(--dark)',
+                  fontFamily: 'JetBrains Mono',
+                }}
+              >
+                edit users
+              </Mui.Button>
+            </Mui.Link>
+
             <Logo src="/assets/logo.svg" />
           </>
         )}
