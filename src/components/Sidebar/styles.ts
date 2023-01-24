@@ -27,7 +27,7 @@ export const Container = styled.aside<SidebarProps>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 48px;
+  gap: 32px;
 
   padding: 16px;
 
@@ -63,7 +63,7 @@ export const Content = styled.div`
 `;
 
 export const Logo = styled.img`
-  width: 120px;
+  width: 90px;
 `;
 
 export const ButtonsBox = styled.div`

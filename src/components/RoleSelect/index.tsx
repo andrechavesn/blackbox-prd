@@ -1,6 +1,7 @@
 import { Autocomplete, TextField } from '@mui/material';
 import { parseCookies } from 'nookies';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { api } from '../../services/api/api';
 import { inputStyle } from '../Modal';
@@ -72,7 +73,7 @@ export function RoleSelect({ userId }: RoleSelectProps) {
       freeSolo
       getOptionLabel={option => option.name || ''}
       onChange={(event: any, value: any) => {
-        setChannel(value);
+        setSelectedChannel(value);
         handleRelation({ channelid: value[0].id, userid: userId });
       }}
       renderInput={params => (

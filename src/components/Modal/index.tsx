@@ -188,6 +188,7 @@ function ResponsiveDialog({
         {
           name: data.name,
           url: data.url,
+          id,
         },
         {
           headers: {
@@ -489,7 +490,6 @@ function ResponsiveDialog({
               size="small"
               sx={inputStyle}
               type="password"
-              defaultValue={initialValues?.password}
             />
             <RoleSelect userId={userId} />
             <Mui.RadioGroup
