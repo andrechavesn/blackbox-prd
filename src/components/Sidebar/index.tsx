@@ -47,25 +47,27 @@ export function Sidebar({ children }: SidebarProps) {
             <Content>
               <Channels adminMode={isSwitchOn} />
             </Content>
-            <Mui.Link
-              href="/Users"
-              sx={{
-                textDecoration: 'none',
-              }}
-            >
-              <Mui.Button
-                variant="contained"
-                color="success"
+            {account && account?.primarygroupsid === 'admin' && (
+              <Mui.Link
+                href="/Users"
                 sx={{
-                  color: 'white',
-                  fontSize: '0.6rem',
-                  backgroundColor: 'var(--dark)',
-                  fontFamily: 'JetBrains Mono',
+                  textDecoration: 'none',
                 }}
               >
-                edit users
-              </Mui.Button>
-            </Mui.Link>
+                <Mui.Button
+                  variant="contained"
+                  color="success"
+                  sx={{
+                    color: 'white',
+                    fontSize: '0.6rem',
+                    backgroundColor: 'var(--dark)',
+                    fontFamily: 'JetBrains Mono',
+                  }}
+                >
+                  edit users
+                </Mui.Button>
+              </Mui.Link>
+            )}
 
             <Logo src="/assets/logo.svg" />
           </>

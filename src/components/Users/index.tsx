@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as Mui from '@mui/material';
 import { IoSettingsSharp, IoTrash } from 'react-icons/io5';
 import Modal from '../Modal';
@@ -14,11 +14,21 @@ export default function Users({ refetch, users }: UserProps) {
   const [updateUser, setUpdateUser] = useState(false);
   const [deleteUser, setDeleteUser] = useState(false);
   const [user, setUser] = useState({
-    id: '',
-    name: '',
-    roleId: '',
-    password: '',
+    id: null,
+    name: null,
+    roleId: null,
+    password: null,
   });
+
+  const handleSelectUser = async (value: any) => {
+    setUser({
+      id: value.id,
+      name: value.name,
+      roleId: value.roleId,
+      password: value.password,
+    });
+    setUpdateUser(true);
+  };
 
   return (
     <Mui.List
@@ -68,13 +78,8 @@ export default function Users({ refetch, users }: UserProps) {
                       }}
                     >
                       <IoSettingsSharp
-                        onClick={() => {
-                          setUser({
-                            id: value.id,
-                            name: value.name,
-                            roleId: value.roleId,
-                            password: value.password,
-                          });
+                        onClick={async () => {
+                          handleSelectUser(value);
                           setUpdateUser(true);
                         }}
                       />
@@ -113,8 +118,8 @@ export default function Users({ refetch, users }: UserProps) {
               fn="updateUser"
               userId={user.id}
               initialValues={{
-                name: user.name,
-                password: user.password,
+                name: user?.name,
+                password: user?.password,
                 roleId: user.roleId,
               }}
               key={user.name}

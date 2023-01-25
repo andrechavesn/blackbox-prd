@@ -7,7 +7,7 @@ import { api } from '../../services/api/api';
 import { inputStyle } from '../Modal';
 
 interface RoleSelectProps {
-  userId: string;
+  userId: any;
 }
 export function RoleSelect({ userId }: RoleSelectProps) {
   const [channels, setChannels] = useState<any[]>([]);
@@ -41,29 +41,39 @@ export function RoleSelect({ userId }: RoleSelectProps) {
     handleChannels();
   }, []);
 
-  const handleRelation = useCallback(async ({ channelid, userid }) => {
+  const handleRelation = async ({
+    channelid,
+    userid,
+  }: {
+    channelid: string;
+    userid: string;
+  }) => {
     try {
       const relationResponse = await api.post(
         `/Channel/Relation/${channelid}/${userid}`,
         {
           headers: {
-            authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         },
       );
-      console.log(userId);
+      console.log('🚀 ~ file: index.tsx:55 ~ RoleSelect ~ userid', userid);
+      console.log(
+        '🚀 ~ file: index.tsx:55 ~ RoleSelect ~ channelid',
+        channelid,
+      );
 
       console.log(relationResponse);
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  };
 
   return (
     <Autocomplete
       multiple
       sx={{
-        width: '100%',
+        width: '352px',
       }}
       size="small"
       id="autocomplete-department"

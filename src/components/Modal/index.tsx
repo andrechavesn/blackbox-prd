@@ -84,6 +84,11 @@ function ResponsiveDialog({
 }: ResponsiveDialogProps) {
   const [roles, setRoles] = useState<Roles[]>([]);
   const { handleSubmit, register } = useForm();
+  const [initial, setInitial] = useState({
+    name: initialValues?.name,
+    url: initialValues?.url,
+    roleId: initialValues?.roleId,
+  });
 
   const { 'blackbox.token': token } = parseCookies();
 
@@ -109,35 +114,6 @@ function ResponsiveDialog({
     };
     handleRoles();
   }, [fn === 'createUser' || fn === 'updateUser']);
-
-  const updateUser = async (data: FormData) => {
-    try {
-      const response = await api.put(
-        `/Account`,
-        {
-          name: data.name,
-          url: data.url,
-          id: userId,
-          roleId: data.roleId,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-      console.log('🚀 ~ file: index.tsx:139 ~ updateUser ~ userId', userId);
-
-      if (response.status === 200) {
-        toast.success('User updated successfully! 🚀');
-        onCloseRequest();
-        refetch();
-        console.log('🚀 ~ file: index.tsx:130 ~ updateUser ~ data', data);
-      }
-    } catch (error) {
-      toast.error(error?.response.data.errors[0]);
-    }
-  };
 
   const createUser = async (data: FormData) => {
     try {
@@ -255,6 +231,7 @@ function ResponsiveDialog({
           '& .MuiDialog-paper': {
             backgroundColor: 'var(--black)',
             color: 'var(--white)',
+            width: '60%',
           },
         }}
         open={isOpen}
@@ -466,75 +443,7 @@ function ResponsiveDialog({
             </Mui.DialogActions>
           </form>
         ) : fn === 'updateUser' ? (
-          <form
-            onSubmit={handleSubmit(updateUser)}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '1rem',
-              padding: '1rem',
-            }}
-          >
-            <Mui.TextField
-              label="Name"
-              {...register('name')}
-              variant="outlined"
-              size="small"
-              sx={inputStyle}
-              defaultValue={initialValues?.name}
-            />
-            <Mui.TextField
-              label="Password"
-              {...register('password')}
-              variant="outlined"
-              size="small"
-              sx={inputStyle}
-              type="password"
-            />
-            <RoleSelect userId={userId} />
-            <Mui.RadioGroup
-              sx={{
-                '& .MuiRadio-root': {
-                  color: 'var(--white)',
-                },
-              }}
-            >
-              {roles.map(role => {
-                return (
-                  <Mui.FormControlLabel
-                    key={role.id}
-                    value={role.id}
-                    control={<Mui.Radio />}
-                    label={role.name}
-                    {...register('roleId')}
-                    onClick={() => console.log(role.id)}
-                  />
-                );
-              })}
-            </Mui.RadioGroup>
-            <Mui.DialogActions
-              sx={{
-                paddingBottom: '1rem',
-              }}
-            >
-              <Mui.Button
-                autoFocus
-                onClick={onCloseRequest}
-                variant="contained"
-                color="error"
-              >
-                Disagree
-              </Mui.Button>
-              <Mui.Button
-                type="submit"
-                autoFocus
-                variant="contained"
-                color="success"
-              >
-                Agree
-              </Mui.Button>
-            </Mui.DialogActions>
-          </form>
+          <div>oi</div>
         ) : fn === 'deleteUser' ? (
           <form onSubmit={fn === 'deleteUser' && handleSubmit(deleteUser)}>
             <Mui.DialogContentText

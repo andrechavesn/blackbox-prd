@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import * as Mui from '@mui/material';
 import { parseCookies } from 'nookies';
 import { useCallback, useEffect, useState } from 'react';
@@ -11,6 +12,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { useRouter } from 'next/router';
 import Modal from '../../components/Modal';
 import { api } from '../../services/api/api';
+import { UpdateModal } from '../../components/UpdateModal';
 
 type Users = {
   id?: string;
@@ -25,10 +27,9 @@ export default function Users() {
   const [deleteUser, setDeleteUser] = useState(false);
   const { push } = useRouter();
   const [user, setUser] = useState({
-    id: '',
-    name: '',
-    roleId: '',
-    password: '',
+    id: null,
+    name: null,
+    roleId: null,
   });
 
   const { 'blackbox.token': token } = parseCookies();
@@ -64,7 +65,7 @@ export default function Users() {
       });
       setUsers(response?.data.value);
     } catch (error) {
-      toast.error(error?.response.data.errors[0]);
+      toast.error(error.message);
     }
   }, []);
   return (
@@ -132,7 +133,7 @@ export default function Users() {
             position: 'absolute',
             top: '24px',
             right: '32px',
-            fontSize: '4rem',
+            fontSize: '3rem',
             color: 'var(--black)',
             cursor: 'pointer',
 
@@ -153,7 +154,7 @@ export default function Users() {
       >
         <Mui.Box
           sx={{
-            width: '50%',
+            width: '95%',
             height: '420px',
             backgroundColor: 'var(--black)',
             borderRadius: '12px',
@@ -169,7 +170,7 @@ export default function Users() {
                   key={value.id}
                   sx={{
                     width: '100%',
-                    height: '60px',
+                    height: '48px',
                     display: 'flex',
                     flexDirection: 'row',
                     borderBottom: '1px solid #f7f7f7',
@@ -201,14 +202,7 @@ export default function Users() {
                         >
                           <IoSettingsSharp
                             onClick={() => {
-                              setUser({
-                                id: value.id,
-                                name: value.name,
-                                roleId: value.roleId,
-                                password: value.password,
-                              });
-
-                              setUpdateUser(true);
+                              push(`/Users/EditUser/${value.id}`);
                             }}
                           />
                         </Mui.Box>
@@ -238,16 +232,20 @@ export default function Users() {
                 >
                   {value.name}
                 </Mui.ListItem>
-                <Modal
+
+                {/* <UpdateModal
                   refetch={refetch}
-                  isOpen={updateUser}
                   content="Do you want to update this user?"
+                  isOpen={updateUser}
                   onCloseRequest={() => {
                     setUpdateUser(false);
                   }}
-                  fn="updateUser"
+                  initialValues={{
+                    name: user.name,
+                    roleId: user.roleId,
+                  }}
                   userId={user.id}
-                />
+                /> */}
                 <Modal
                   refetch={refetch}
                   isOpen={deleteUser}
