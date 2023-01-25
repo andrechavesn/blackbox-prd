@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-blackboxapp-dev-150523-authRole",
+      "UnauthRoleArn": "arn:aws:iam::390818022566:role/amplify-blackboxapp-dev-150523-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::390818022566:role/amplify-blackboxapp-dev-150523-authRole",
+      "Region": "eu-west-1",
+      "DeploymentBucketName": "amplify-blackboxapp-dev-150523-deployment",
+      "UnauthRoleName": "amplify-blackboxapp-dev-150523-unauthRole",
+      "StackName": "amplify-blackboxapp-dev-150523",
+      "StackId": "arn:aws:cloudformation:eu-west-1:390818022566:stack/amplify-blackboxapp-dev-150523/da256200-9cda-11ed-bb01-0a506596d9cb",
+      "AmplifyAppId": "d1wv85w4l32d0p"
+    },
+    "categories": {
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d1wv85w4l32d0p",
+          "type": "cicd"
+        }
+      }
+    }
+  }
+}
