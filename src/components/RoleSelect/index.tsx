@@ -1,25 +1,40 @@
+/* eslint-disable array-callback-return */
 import { Autocomplete, TextField } from '@mui/material';
+import axios from 'axios';
+import { useRouter } from 'next/router';
 import { parseCookies } from 'nookies';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { api } from '../../services/api/api';
 import { inputStyle } from '../Modal';
 
 interface RoleSelectProps {
   userId: any;
+  channelList: any;
 }
-export function RoleSelect({ userId }: RoleSelectProps) {
-  const [channels, setChannels] = useState<any[]>([]);
-  const [selectedChannel, setSelectedChannel] = useState<any[]>([]);
+
+type Channel = {
+  id: string;
+  name: string;
+  url: string;
+};
+export function RoleSelect({ userId, channelList }: RoleSelectProps) {
+  const [channels, setChannels] = useState<Channel[]>([]);
+  const [selectedChannel, setSelectedChannel] = useState<any>(
+    channelList !== undefined ? channelList : [],
+  );
+  const [removedChannel, setRemovedChannel] = useState<any>();
+  const [channel, setChannel] = useState<Channel[]>();
   const [loading, setLoading] = useState(true);
-  const [channel, setChannel] = useState<[]>([]);
+  const { reload } = useRouter();
 
   const { 'blackbox.token': token } = parseCookies();
+  useEffect(() => {
+    if (channelList !== undefined) {
+      setSelectedChannel(channelList);
+    }
+  }, [channelList]);
 
-  // useEffect(() => {
-  //   setSelectedChannel(channels.filter(x => channel.find(y => y.id === x.id)));
-  // }, [channel, channels]);
   useEffect(() => {
     const handleChannels = async () => {
       try {
@@ -49,23 +64,47 @@ export function RoleSelect({ userId }: RoleSelectProps) {
     userid: string;
   }) => {
     try {
-      const relationResponse = await api.post(
-        `/Channel/Relation/${channelid}/${userid}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const config = {
+        method: 'post',
+        url: `https://www.black-box.uk/api/Channel/Relation/${channelid}/${userid}`,
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
-      console.log('🚀 ~ file: index.tsx:55 ~ RoleSelect ~ userid', userid);
-      console.log(
-        '🚀 ~ file: index.tsx:55 ~ RoleSelect ~ channelid',
-        channelid,
-      );
+      };
 
-      console.log(relationResponse);
+      axios(config).then(() => {
+        try {
+          toast.success('Channel added');
+        } catch (error) {
+          toast.error(error?.message);
+        }
+      });
     } catch (error) {
-      console.log(error);
+      toast.error(error?.message);
+    }
+  };
+
+  const handleRemoveRelation = async ({
+    channelid,
+    userid,
+  }: {
+    channelid: string;
+    userid: string;
+  }) => {
+    try {
+      const config = {
+        method: 'delete',
+        url: `https://www.black-box.uk/api/Channel/Relation/${channelid}/${userid}`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      axios(config).then(() => {
+        toast.success('Channel removed');
+      });
+    } catch (error) {
+      toast.error(error?.message);
     }
   };
 
@@ -76,15 +115,29 @@ export function RoleSelect({ userId }: RoleSelectProps) {
         width: '352px',
       }}
       size="small"
-      id="autocomplete-department"
+      id="channel-select"
       options={channels}
       value={selectedChannel}
       filterSelectedOptions
       freeSolo
       getOptionLabel={option => option.name || ''}
-      onChange={(event: any, value: any) => {
+      onChange={(event, value, reason) => {
         setSelectedChannel(value);
-        handleRelation({ channelid: value[0].id, userid: userId });
+        if (reason === 'selectOption') {
+          handleRelation({
+            channelid: value[value.length - 1]?.id,
+            userid: userId,
+          });
+
+          setChannel(value);
+        }
+        if (reason === 'removeOption') {
+          handleRemoveRelation({
+            channelid: value[value.length - 1]?.id,
+            userid: userId,
+          });
+          setChannel(value);
+        }
       }}
       renderInput={params => (
         <TextField
@@ -92,7 +145,6 @@ export function RoleSelect({ userId }: RoleSelectProps) {
           sx={inputStyle}
           size="small"
           disabled={loading}
-          label="Selecione o canal"
           variant="outlined"
           autoComplete="off"
         />

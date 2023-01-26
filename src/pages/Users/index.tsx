@@ -2,17 +2,11 @@
 import * as Mui from '@mui/material';
 import { parseCookies } from 'nookies';
 import { useCallback, useEffect, useState } from 'react';
-import {
-  IoReturnDownBackOutline,
-  IoSettingsSharp,
-  IoTrash,
-} from 'react-icons/io5';
+import { IoSettingsSharp, IoTrash } from 'react-icons/io5';
 import { toast } from 'react-toastify';
-import Tooltip from '@mui/material/Tooltip';
 import { useRouter } from 'next/router';
 import Modal from '../../components/Modal';
 import { api } from '../../services/api/api';
-import { UpdateModal } from '../../components/UpdateModal';
 
 type Users = {
   id?: string;
@@ -23,8 +17,8 @@ type Users = {
 export default function Users() {
   const [users, setUsers] = useState<Users[]>();
   const [createUser, setCreateUser] = useState(false);
-  const [updateUser, setUpdateUser] = useState(false);
   const [deleteUser, setDeleteUser] = useState(false);
+  const [userId, setUserId] = useState<string>();
   const { push } = useRouter();
   const [user, setUser] = useState({
     id: null,
@@ -48,6 +42,8 @@ export default function Users() {
             toast.info('No users found');
           }
           setUsers(response?.data.value);
+
+          console.log('aqui', response?.data.value);
         }
       } catch (error) {
         toast.error(error.message);
@@ -73,8 +69,8 @@ export default function Users() {
       sx={{
         width: '100%',
         display: 'flex',
+        flexDirection: 'column',
         backgroundColor: '#ccc',
-        position: 'relative',
         svg: {
           '&:hover': {
             opacity: '0.7',
@@ -86,17 +82,22 @@ export default function Users() {
       <Mui.Box
         sx={{
           display: 'flex',
+          width: '90%',
           alignItems: 'center',
-          gap: '32px',
-          position: 'absolute',
-          top: '24px',
-          left: '32px',
+          justifyContent: 'space-between',
+          padding: '24px 32px',
+
+          '@media (max-width: 420px)': {
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            gap: '16px',
+          },
         }}
       >
         <Mui.Typography
           sx={{
             color: 'var(--black)',
-            fontSize: '1.8rem',
+            fontSize: '1.6rem',
             fontWeight: 'bold',
             fontFamily: 'JetBrains Mono',
           }}
@@ -109,8 +110,8 @@ export default function Users() {
           color="success"
           size="medium"
           sx={{
-            width: '150px',
-            height: '48px',
+            width: '130px',
+            height: '40px',
             backgroundColor: 'var(--black)',
           }}
           onClick={() => setCreateUser(true)}
@@ -118,7 +119,7 @@ export default function Users() {
           <Mui.Typography
             sx={{
               color: 'var(--white)',
-              fontSize: '1rem',
+              fontSize: '0.8rem',
               fontWeight: 'bold',
               fontFamily: 'JetBrains Mono',
             }}
@@ -126,22 +127,32 @@ export default function Users() {
             NEW USER
           </Mui.Typography>
         </Mui.Button>
-      </Mui.Box>
-      <Tooltip title="Home">
-        <IoReturnDownBackOutline
-          style={{
-            position: 'absolute',
-            top: '24px',
-            right: '32px',
-            fontSize: '3rem',
-            color: 'var(--black)',
-            cursor: 'pointer',
 
+        <Mui.Link
+          href="/Home"
+          sx={{
+            textDecoration: 'none',
             transition: 'all 0.2s ease-in-out',
+            '&:hover': {
+              transform: 'scale(1.2)',
+              opacity: '0.7',
+            },
           }}
-          onClick={() => push('/Home')}
-        />
-      </Tooltip>
+        >
+          <Mui.Typography
+            sx={{
+              color: 'var(--black)',
+              fontSize: '1.2rem',
+              fontWeight: 'bold',
+              fontFamily: 'JetBrains Mono',
+              textDecoration: 'underline',
+            }}
+          >
+            Back
+          </Mui.Typography>
+        </Mui.Link>
+      </Mui.Box>
+
       <Mui.Box
         sx={{
           display: 'flex',
@@ -163,6 +174,25 @@ export default function Users() {
             flexDirection: 'column',
           }}
         >
+          {/* <UsersTable
+            data={users}
+            isLoading={false}
+            columns={[
+              {
+                id: 'role',
+                label: 'Role',
+                minWidth: 40,
+                align: 'center',
+              },
+              {
+                id: 'name',
+                label: 'Name',
+                minWidth: 40,
+                align: 'center',
+              },
+            ]}
+          /> */}
+
           <Mui.List>
             {users?.map(value => (
               <>
@@ -170,7 +200,8 @@ export default function Users() {
                   key={value.id}
                   sx={{
                     width: '100%',
-                    height: '48px',
+                    height: '32px',
+                    fontSize: '0.8rem',
                     display: 'flex',
                     flexDirection: 'row',
                     borderBottom: '1px solid #f7f7f7',
@@ -190,6 +221,7 @@ export default function Users() {
                         <Mui.Box
                           sx={{
                             svg: {
+                              fontSize: '1rem',
                               color: 'var(--white)',
                               transition: 'all 0.2s ease-in-out',
                               '&:hover': {
@@ -220,8 +252,9 @@ export default function Users() {
                           }}
                         >
                           <IoTrash
+                            size="1rem"
                             onClick={() => {
-                              setUser({ ...user, id: value.id });
+                              setUserId(value.id);
                               setDeleteUser(true);
                             }}
                           />
@@ -233,19 +266,6 @@ export default function Users() {
                   {value.name}
                 </Mui.ListItem>
 
-                {/* <UpdateModal
-                  refetch={refetch}
-                  content="Do you want to update this user?"
-                  isOpen={updateUser}
-                  onCloseRequest={() => {
-                    setUpdateUser(false);
-                  }}
-                  initialValues={{
-                    name: user.name,
-                    roleId: user.roleId,
-                  }}
-                  userId={user.id}
-                /> */}
                 <Modal
                   refetch={refetch}
                   isOpen={deleteUser}
@@ -254,7 +274,7 @@ export default function Users() {
                     setDeleteUser(false);
                   }}
                   fn="deleteUser"
-                  userId={value?.id}
+                  userId={userId}
                 />
               </>
             ))}

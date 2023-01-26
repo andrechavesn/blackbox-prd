@@ -153,7 +153,7 @@ function ResponsiveDialog({
         refetch();
       }
     } catch (error) {
-      toast.error(error?.response.data.errors[0]);
+      toast.error(error?.message);
     }
   };
 
@@ -292,6 +292,7 @@ function ResponsiveDialog({
               variant="outlined"
               size="small"
               sx={inputStyle}
+              required
             />
             <Mui.TextField
               label="Url"
@@ -299,6 +300,7 @@ function ResponsiveDialog({
               variant="outlined"
               size="small"
               sx={inputStyle}
+              required
             />
 
             <Mui.DialogActions
@@ -390,6 +392,8 @@ function ResponsiveDialog({
               variant="outlined"
               size="small"
               sx={inputStyle}
+              defaultValue=" "
+              required
             />
             <Mui.TextField
               label="Password"
@@ -398,6 +402,8 @@ function ResponsiveDialog({
               size="small"
               sx={inputStyle}
               type="password"
+              defaultValue=" "
+              required
             />
             <Mui.RadioGroup
               sx={{
@@ -411,7 +417,7 @@ function ResponsiveDialog({
                   <Mui.FormControlLabel
                     key={role.id}
                     value={role.id}
-                    control={<Mui.Radio />}
+                    control={<Mui.Radio required />}
                     label={role.name}
                     {...register('roleId')}
                     onClick={() => console.log(role.id)}

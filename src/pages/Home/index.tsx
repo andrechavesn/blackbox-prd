@@ -1,5 +1,11 @@
 import Player from '../../components/Player';
+import { SplashScreen } from '../../components/SplashScreen';
 
 export default function Home() {
-  return <Player />;
+  return (
+    <>
+      <SplashScreen />
+      <Player />
+    </>
+  );
 }

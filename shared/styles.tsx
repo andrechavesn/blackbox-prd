@@ -54,6 +54,25 @@ export const globalStyles = (
           transform: rotate(1turn);
         }
       }
+
+      @keyframes splash {
+        0% {
+          height: 100vh;
+          visibility: visible;
+          display: initial;
+        }
+        100% {
+          height: 0;
+        }
+      }
+
+      @keyframes out {
+        to {
+          opacity: 0;
+          visibility: hidden;
+          display: none;
+        }
+      }
     `}
   />
 );

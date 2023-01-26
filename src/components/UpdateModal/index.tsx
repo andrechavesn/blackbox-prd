@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { api } from '../../services/api/api';
 import { inputStyle } from '../Modal';
-import { RoleSelect } from '../RoleSelect';
 
 interface UpdateModalProps {
   isOpen: boolean;
@@ -36,23 +35,22 @@ export function UpdateModal({
   refetch,
   initialValues,
 }: UpdateModalProps) {
-  useEffect(() => {
-    console.log('initialValues');
-    console.log(initialValues);
-  }, []);
   const { handleSubmit, register } = useForm();
   const [roles, setRoles] = useState<any[]>([]);
   const { 'blackbox.token': token } = parseCookies();
 
   const updateUser = async (data: FormData) => {
     try {
+      if (data.name === '') {
+        toast.error('Name is required');
+        return;
+      }
       const response = await api.put(
         `/Account`,
         {
           name: data.name,
-          url: data.url,
           id: userId,
-          roleId: data.roleId,
+          roleId: data.roleId && data.roleId,
         },
         {
           headers: {
@@ -96,6 +94,7 @@ export function UpdateModal({
         }}
       >
         <Mui.TextField
+          required
           label="Name"
           {...register('name')}
           variant="outlined"
@@ -104,7 +103,6 @@ export function UpdateModal({
           defaultValue={initialValues?.name}
         />
 
-        <RoleSelect userId={userId} />
         <Mui.RadioGroup
           sx={{
             '& .MuiRadio-root': {
@@ -116,7 +114,7 @@ export function UpdateModal({
             return (
               <Mui.FormControlLabel
                 key={role.id}
-                value={role.id}
+                defaultValue={role.id}
                 control={<Mui.Radio />}
                 label={role.name}
                 {...register('roleId')}

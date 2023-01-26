@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { parseCookies } from 'nookies';
 import * as Mui from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -18,35 +19,12 @@ interface FormData {
 }
 
 export default function EditUser() {
-  const { query, asPath } = useRouter();
+  const { query, push } = useRouter();
   const [user, setUser] = useState<any>();
+  const [userId, setUserId] = useState<any>(query.id);
   const [roles, setRoles] = useState<any[]>([]);
-  const [userId, setUserId] = useState<any>();
   const { 'blackbox.token': token } = parseCookies();
   const { register, handleSubmit } = useForm();
-
-  const handleRelation = async ({
-    channelid,
-    userid,
-  }: {
-    channelid: string;
-    userid: string;
-  }) => {
-    try {
-      const relationResponse = await api.post(
-        `/Channel/Relation/${channelid}/${userid}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      console.log(relationResponse);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const updateUser = async (data: FormData) => {
     try {
@@ -54,9 +32,9 @@ export default function EditUser() {
         `/Account`,
         {
           name: data.name,
-          id: query.id,
-          roleId: data.roleId,
-          password: data.password,
+          id: userId,
+          roleId: data.roleId && data.roleId,
+          // password: data.password,
         },
         {
           headers: {
@@ -64,18 +42,22 @@ export default function EditUser() {
           },
         },
       );
+      if (data.name === '') {
+        toast.error('Name is required');
+        return;
+      }
 
       if (response.status === 200) {
         toast.success('User updated successfully! 🚀');
-        handleRelation({
-          channelid: data.channelId,
-          userid: user?.id,
-        });
       }
     } catch (error) {
       toast.error(error?.response.data.errors[0]);
     }
   };
+
+  useEffect(() => {
+    setUserId(query.id);
+  }, [query.id]);
 
   useEffect(() => {
     const handleRoles = async () => {
@@ -87,9 +69,6 @@ export default function EditUser() {
         });
 
         if (response.status === 200) {
-          if (response?.data?.length === 0) {
-            toast.info('No users found');
-          }
           setRoles(response?.data.value);
         }
       } catch (error) {
@@ -107,13 +86,12 @@ export default function EditUser() {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log(response?.data.value);
 
         setUser(response?.data.value);
       };
       handleUser();
     }
-  }, []);
+  }, [query.id]);
 
   return (
     <Mui.Box
@@ -152,7 +130,7 @@ export default function EditUser() {
                 style={{
                   fontSize: '14px',
                   fontWeight: 500,
-                  color: 'var(--black)',
+                  color: 'var(--white)',
                   lineHeight: '0px',
                 }}
               >
@@ -163,9 +141,11 @@ export default function EditUser() {
                   ...inputStyle,
                   width: '352px',
                 }}
+                required={user?.name === ''}
                 size="small"
                 variant="outlined"
                 value={user?.name}
+                {...register('name')}
                 onChange={e => setUser({ ...user, name: e.target.value })}
               />
             </Mui.Box>
@@ -174,13 +154,13 @@ export default function EditUser() {
                 style={{
                   fontSize: '14px',
                   fontWeight: 500,
-                  color: 'var(--black)',
+                  color: 'var(--white)',
                   lineHeight: '0px',
                 }}
               >
                 Channels
               </p>
-              <RoleSelect userId={query.id} />
+              <RoleSelect userId={query.id} channelList={user?.channelsList} />
             </Mui.Box>
             <Mui.RadioGroup
               sx={{
@@ -194,7 +174,12 @@ export default function EditUser() {
                   <Mui.FormControlLabel
                     key={role.id}
                     value={role.id}
-                    control={<Mui.Radio checked={user?.role.id === role.id} />}
+                    control={
+                      <Mui.Radio
+                        checked={user?.role.id === role.id}
+                        onChange={e => setUser({ ...user, role })}
+                      />
+                    }
                     label={role.name}
                     {...register('roleId')}
                   />
@@ -210,8 +195,13 @@ export default function EditUser() {
               marginTop: '24px',
             }}
           >
-            <Mui.Button autoFocus variant="contained" color="error">
-              Disagree
+            <Mui.Button
+              autoFocus
+              variant="contained"
+              color="info"
+              onClick={() => push('/Users')}
+            >
+              Return
             </Mui.Button>
             <Mui.Button
               type="submit"

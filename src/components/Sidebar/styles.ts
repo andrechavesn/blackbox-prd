@@ -32,6 +32,7 @@ export const Container = styled.aside<SidebarProps>`
   padding: 16px;
 
   color: var(--white);
+  position: relative;
 `;
 export const Header = styled.header`
   width: 100%;

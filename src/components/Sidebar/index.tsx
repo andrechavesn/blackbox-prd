@@ -1,5 +1,6 @@
 import { ReactElement, useContext, useState } from 'react';
 import * as Mui from '@mui/material';
+import { useRouter } from 'next/router';
 import { Channels } from './Channels';
 import {
   Main,
@@ -21,6 +22,8 @@ interface SidebarProps {
 
 export function Sidebar({ children }: SidebarProps) {
   const { account } = useContext(AuthContext);
+  const { asPath } = useRouter();
+
   const [isSwitchOn, setIsSwitchOn] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -32,8 +35,8 @@ export function Sidebar({ children }: SidebarProps) {
           <>
             <Header>
               <TitleBox>
-                <Title>Home</Title>
-
+                <Title>{asPath?.replace('/', '').split('/')[0]}</Title>
+                {/* <Logo /> */}
                 {account && account?.primarygroupsid === 'admin' && (
                   <ButtonsBox>
                     <Switch
@@ -43,33 +46,34 @@ export function Sidebar({ children }: SidebarProps) {
                   </ButtonsBox>
                 )}
               </TitleBox>
+              {account && account?.primarygroupsid === 'admin' && (
+                <Mui.Link
+                  href="/Users"
+                  sx={{
+                    textDecoration: 'none',
+                  }}
+                >
+                  <Mui.Button
+                    variant="contained"
+                    color="success"
+                    sx={{
+                      color: 'white',
+                      fontSize: '0.7rem',
+                      backgroundColor: 'var(--dark)',
+                      fontFamily: 'JetBrains Mono',
+                      alignSelf: 'flex-end',
+                      position: 'absolute',
+                      right: '24px',
+                    }}
+                  >
+                    edit users
+                  </Mui.Button>
+                </Mui.Link>
+              )}
             </Header>
             <Content>
               <Channels adminMode={isSwitchOn} />
             </Content>
-            {account && account?.primarygroupsid === 'admin' && (
-              <Mui.Link
-                href="/Users"
-                sx={{
-                  textDecoration: 'none',
-                }}
-              >
-                <Mui.Button
-                  variant="contained"
-                  color="success"
-                  sx={{
-                    color: 'white',
-                    fontSize: '0.6rem',
-                    backgroundColor: 'var(--dark)',
-                    fontFamily: 'JetBrains Mono',
-                  }}
-                >
-                  edit users
-                </Mui.Button>
-              </Mui.Link>
-            )}
-
-            <Logo src="/assets/logo.svg" />
           </>
         )}
       </Container>

@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "dev": "next",
-    "build": "next build && next export",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx --fix ."
   },
@@ -13,7 +13,6 @@
     "@typescript-eslint/eslint-plugin": "^5.32.0",
     "@typescript-eslint/parser": "^5.32.0",
     "eslint": "^7.32.0 || ^8.2.0",
-    "next": "latest",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.5.0",
     "eslint-import-resolver-typescript": "^3.4.0",
@@ -23,8 +22,7 @@
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
     "prettier": "^2.7.1",
-    "typescript": "latest",
-    "aws-amplify":"latest"
+    "typescript": "latest"
   },
   "dependencies": {
     "@emotion/cache": "^11.10.5",
