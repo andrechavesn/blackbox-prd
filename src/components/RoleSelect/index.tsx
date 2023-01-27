@@ -1,7 +1,6 @@
 /* eslint-disable array-callback-return */
 import { Autocomplete, TextField } from '@mui/material';
 import axios from 'axios';
-import { useRouter } from 'next/router';
 import { parseCookies } from 'nookies';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -23,10 +22,7 @@ export function RoleSelect({ userId, channelList }: RoleSelectProps) {
   const [selectedChannel, setSelectedChannel] = useState<any>(
     channelList !== undefined ? channelList : [],
   );
-  const [removedChannel, setRemovedChannel] = useState<any>();
-  const [channel, setChannel] = useState<Channel[]>();
   const [loading, setLoading] = useState(true);
-  const { reload } = useRouter();
 
   const { 'blackbox.token': token } = parseCookies();
   useEffect(() => {
@@ -66,7 +62,7 @@ export function RoleSelect({ userId, channelList }: RoleSelectProps) {
     try {
       const config = {
         method: 'post',
-        url: `https://www.black-box.uk/api/Channel/Relation/${channelid}/${userid}`,
+        url: `https://api.black-box.uk/api/Channel/Relation/${channelid}/${userid}`,
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -92,17 +88,19 @@ export function RoleSelect({ userId, channelList }: RoleSelectProps) {
     userid: string;
   }) => {
     try {
-      const config = {
-        method: 'delete',
-        url: `https://www.black-box.uk/api/Channel/Relation/${channelid}/${userid}`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
+      if (channelid !== undefined) {
+        const config = {
+          method: 'delete',
+          url: `https://api.black-box.uk/api/Channel/Relation/${channelid}/${userId}`,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
 
-      axios(config).then(() => {
-        toast.success('Channel removed');
-      });
+        axios(config).then(() => {
+          toast.success('Channel removed');
+        });
+      }
     } catch (error) {
       toast.error(error?.message);
     }
@@ -128,15 +126,12 @@ export function RoleSelect({ userId, channelList }: RoleSelectProps) {
             channelid: value[value.length - 1]?.id,
             userid: userId,
           });
-
-          setChannel(value);
         }
         if (reason === 'removeOption') {
           handleRemoveRelation({
-            channelid: value[value.length - 1]?.id,
+            channelid: selectedChannel[selectedChannel.length - 1]?.id,
             userid: userId,
           });
-          setChannel(value);
         }
       }}
       renderInput={params => (

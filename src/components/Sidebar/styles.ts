@@ -40,7 +40,7 @@ export const Header = styled.header`
 `;
 export const TitleBox = styled.div`
   display: flex;
-  width: 100%;
+  align-items: center;
 
   gap: 56px;
   transition: 0.5s ease-in-out;
@@ -69,7 +69,6 @@ export const Logo = styled.img`
 
 export const ButtonsBox = styled.div`
   display: flex;
-  flex-direction: column;
   align-items: center;
   gap: 16px;
 

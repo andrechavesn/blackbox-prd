@@ -7,7 +7,6 @@ import { parseCookies } from 'nookies';
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { api } from '../../services/api/api';
-import { RoleSelect } from '../RoleSelect';
 
 type Roles = {
   id?: string;
@@ -84,11 +83,6 @@ function ResponsiveDialog({
 }: ResponsiveDialogProps) {
   const [roles, setRoles] = useState<Roles[]>([]);
   const { handleSubmit, register } = useForm();
-  const [initial, setInitial] = useState({
-    name: initialValues?.name,
-    url: initialValues?.url,
-    roleId: initialValues?.roleId,
-  });
 
   const { 'blackbox.token': token } = parseCookies();
 
@@ -231,7 +225,6 @@ function ResponsiveDialog({
           '& .MuiDialog-paper': {
             backgroundColor: 'var(--black)',
             color: 'var(--white)',
-            width: '60%',
           },
         }}
         open={isOpen}
@@ -455,7 +448,6 @@ function ResponsiveDialog({
             <Mui.DialogContentText
               sx={{
                 color: 'var(--gray)',
-                padding: '16px',
                 textAlign: 'center',
               }}
             >
@@ -464,6 +456,7 @@ function ResponsiveDialog({
             <Mui.DialogActions
               sx={{
                 paddingBottom: '1rem',
+                marginTop: '1rem',
               }}
             >
               <Mui.Button

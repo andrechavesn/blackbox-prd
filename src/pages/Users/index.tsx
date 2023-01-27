@@ -70,6 +70,7 @@ export default function Users() {
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
+        alignItems: 'center',
         backgroundColor: '#ccc',
         svg: {
           '&:hover': {
@@ -82,52 +83,56 @@ export default function Users() {
       <Mui.Box
         sx={{
           display: 'flex',
-          width: '90%',
-          alignItems: 'center',
           justifyContent: 'space-between',
+          width: '80%',
+
           padding: '24px 32px',
 
           '@media (max-width: 420px)': {
             flexDirection: 'column',
-            alignItems: 'flex-start',
             gap: '16px',
           },
         }}
       >
-        <Mui.Typography
+        <Mui.Box
           sx={{
-            color: 'var(--black)',
-            fontSize: '1.6rem',
-            fontWeight: 'bold',
-            fontFamily: 'JetBrains Mono',
+            display: 'flex',
+            gap: '64px',
+            alignItems: 'center',
           }}
-        >
-          Users
-        </Mui.Typography>
-        <Mui.Button
-          autoFocus
-          variant="contained"
-          color="success"
-          size="medium"
-          sx={{
-            width: '130px',
-            height: '40px',
-            backgroundColor: 'var(--black)',
-          }}
-          onClick={() => setCreateUser(true)}
         >
           <Mui.Typography
             sx={{
-              color: 'var(--white)',
-              fontSize: '0.8rem',
+              color: 'var(--black)',
+              fontSize: '1.3rem',
               fontWeight: 'bold',
               fontFamily: 'JetBrains Mono',
             }}
           >
-            NEW USER
+            Users
           </Mui.Typography>
-        </Mui.Button>
-
+          <Mui.Button
+            autoFocus
+            variant="contained"
+            color="success"
+            size="small"
+            sx={{
+              backgroundColor: 'var(--black)',
+            }}
+            onClick={() => setCreateUser(true)}
+          >
+            <Mui.Typography
+              sx={{
+                color: '#beb7b7',
+                fontSize: '0.8rem',
+                fontWeight: 'bold',
+                fontFamily: 'JetBrains Mono',
+              }}
+            >
+              NEW USER
+            </Mui.Typography>
+          </Mui.Button>
+        </Mui.Box>
         <Mui.Link
           href="/Home"
           sx={{
@@ -165,11 +170,10 @@ export default function Users() {
       >
         <Mui.Box
           sx={{
-            width: '95%',
+            width: '80%',
             height: '420px',
             backgroundColor: 'var(--black)',
-            borderRadius: '12px',
-            border: '2px solid #f7f7f7',
+            borderRadius: '6px',
             display: 'flex',
             flexDirection: 'column',
           }}
@@ -204,7 +208,7 @@ export default function Users() {
                     fontSize: '0.8rem',
                     display: 'flex',
                     flexDirection: 'row',
-                    borderBottom: '1px solid #f7f7f7',
+                    borderBottom: '1px solid #beb7b7',
                     color: 'var(--white)',
                   }}
                   secondaryAction={

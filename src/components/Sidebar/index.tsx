@@ -22,7 +22,6 @@ interface SidebarProps {
 
 export function Sidebar({ children }: SidebarProps) {
   const { account } = useContext(AuthContext);
-  const { asPath } = useRouter();
 
   const [isSwitchOn, setIsSwitchOn] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -35,41 +34,34 @@ export function Sidebar({ children }: SidebarProps) {
           <>
             <Header>
               <TitleBox>
-                <Title>{asPath?.replace('/', '').split('/')[0]}</Title>
-                {/* <Logo /> */}
                 {account && account?.primarygroupsid === 'admin' && (
                   <ButtonsBox>
                     <Switch
                       isOn={isSwitchOn}
                       onChangeRequest={() => setIsSwitchOn(!isSwitchOn)}
                     />
+                    <Mui.Link
+                      href="/Users"
+                      sx={{
+                        textDecoration: 'none',
+                      }}
+                    >
+                      <Mui.Button
+                        variant="contained"
+                        color="success"
+                        sx={{
+                          color: 'white',
+                          fontSize: '0.6rem',
+                          backgroundColor: 'var(--dark)',
+                          fontFamily: 'JetBrains Mono',
+                        }}
+                      >
+                        edit users
+                      </Mui.Button>
+                    </Mui.Link>
                   </ButtonsBox>
                 )}
               </TitleBox>
-              {account && account?.primarygroupsid === 'admin' && (
-                <Mui.Link
-                  href="/Users"
-                  sx={{
-                    textDecoration: 'none',
-                  }}
-                >
-                  <Mui.Button
-                    variant="contained"
-                    color="success"
-                    sx={{
-                      color: 'white',
-                      fontSize: '0.7rem',
-                      backgroundColor: 'var(--dark)',
-                      fontFamily: 'JetBrains Mono',
-                      alignSelf: 'flex-end',
-                      position: 'absolute',
-                      right: '24px',
-                    }}
-                  >
-                    edit users
-                  </Mui.Button>
-                </Mui.Link>
-              )}
             </Header>
             <Content>
               <Channels adminMode={isSwitchOn} />
