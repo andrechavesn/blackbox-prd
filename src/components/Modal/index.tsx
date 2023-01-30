@@ -385,7 +385,6 @@ function ResponsiveDialog({
               variant="outlined"
               size="small"
               sx={inputStyle}
-              defaultValue=" "
               required
             />
             <Mui.TextField
@@ -395,7 +394,6 @@ function ResponsiveDialog({
               size="small"
               sx={inputStyle}
               type="password"
-              defaultValue=" "
               required
             />
             <Mui.RadioGroup

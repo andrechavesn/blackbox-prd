@@ -112,7 +112,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
         })
         .catch(error => {
           if (error) {
-            toast.error('Error loading channels');
+            console.log(error);
           }
         });
     } else {

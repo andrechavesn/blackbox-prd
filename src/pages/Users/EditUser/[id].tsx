@@ -27,30 +27,28 @@ export default function EditUser() {
 
   const updateUser = async (data: FormData) => {
     try {
-      const response = await api.put(
-        `/Account`,
-        {
-          name: data.name,
-          id: user.id,
-          roleId: data.roleId,
-          // password: data.password,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
+      if (data) {
+        const response = await api.put(
+          `/Account`,
+          {
+            name: data.name,
+            id: user.id,
+            roleId: data.roleId,
+            password: data.password ? data.password : null,
           },
-        },
-      );
-      if (data.name === '') {
-        toast.error('Name is required');
-        return;
-      }
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
 
-      if (response.status === 200) {
-        toast.success('User updated successfully! 🚀');
+        if (response.status === 200) {
+          toast.success('User updated successfully! 🚀');
+        }
       }
     } catch (error) {
-      toast.error(error?.response.data.errors[0]);
+      toast.error(error?.message);
     }
   };
 
@@ -131,6 +129,31 @@ export default function EditUser() {
               >
                 Name
               </p>
+
+              {user && (
+                <Mui.TextField
+                  sx={{
+                    ...inputStyle,
+                    width: '352px',
+                  }}
+                  size="small"
+                  variant="outlined"
+                  defaultValue={user.name}
+                  {...register('name')}
+                />
+              )}
+            </Mui.Box>
+            <Mui.Box>
+              <p
+                style={{
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  color: 'var(--white)',
+                  lineHeight: '0px',
+                }}
+              >
+                Password
+              </p>
               <Mui.TextField
                 sx={{
                   ...inputStyle,
@@ -138,9 +161,8 @@ export default function EditUser() {
                 }}
                 size="small"
                 variant="outlined"
-                value={user?.name}
-                {...register('name')}
-                onChange={e => setUser({ ...user, name: e.target.value })}
+                {...register('password')}
+                type="password"
               />
             </Mui.Box>
             <Mui.Box>
@@ -156,31 +178,47 @@ export default function EditUser() {
               </p>
               <RoleSelect userId={query.id} channelList={user?.channelsList} />
             </Mui.Box>
-            <Mui.RadioGroup
-              sx={{
-                '& .MuiRadio-root': {
+
+            <Mui.Box>
+              <p
+                style={{
+                  fontSize: '14px',
+                  fontWeight: 500,
                   color: 'var(--white)',
-                },
-              }}
-            >
-              {roles.map(role => {
-                return (
-                  <Mui.FormControlLabel
-                    key={role.id}
-                    value={role.id}
-                    control={
-                      <Mui.Radio
-                        checked={user?.role.id === role.id}
-                        onChange={e => setUser({ ...user, role })}
+                  lineHeight: '0px',
+                }}
+              >
+                Role
+              </p>
+              {roles && user && (
+                <Mui.RadioGroup
+                  sx={{
+                    '& .MuiRadio-root': {
+                      color: 'var(--white)',
+                    },
+                  }}
+                >
+                  {roles.map(role => {
+                    return (
+                      <Mui.FormControlLabel
+                        key={role.id}
+                        value={role.id}
+                        control={
+                          <Mui.Radio
+                            checked={user?.role.id === role.id}
+                            onChange={e => setUser({ ...user, role })}
+                          />
+                        }
+                        label={role.name}
+                        {...register('roleId')}
                       />
-                    }
-                    label={role.name}
-                    {...register('roleId')}
-                  />
-                );
-              })}
-            </Mui.RadioGroup>
+                    );
+                  })}
+                </Mui.RadioGroup>
+              )}
+            </Mui.Box>
           </Mui.Box>
+
           <Mui.Box
             sx={{
               display: 'flex',

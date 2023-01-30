@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
 import Modal from '../../components/Modal';
 import { api } from '../../services/api/api';
+import { CreateUserModal } from '../../components/CreateUserModal';
 
 type Users = {
   id?: string;
@@ -71,6 +72,7 @@ export default function Users() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+
         backgroundColor: '#ccc',
         svg: {
           '&:hover': {
@@ -176,6 +178,7 @@ export default function Users() {
             borderRadius: '6px',
             display: 'flex',
             flexDirection: 'column',
+            overflow: 'auto',
           }}
         >
           {/* <UsersTable
@@ -284,14 +287,13 @@ export default function Users() {
             ))}
           </Mui.List>
         </Mui.Box>
-        <Modal
+        <CreateUserModal
           refetch={refetch}
           isOpen={createUser}
           content="Do you want to create a new user?"
           onCloseRequest={() => {
             setCreateUser(false);
           }}
-          fn="createUser"
         />
       </Mui.Box>
     </Mui.Box>

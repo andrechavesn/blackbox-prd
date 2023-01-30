@@ -108,6 +108,7 @@ export function RoleSelect({ userId, channelList }: RoleSelectProps) {
 
   return (
     <Autocomplete
+      clearIcon={false}
       multiple
       sx={{
         width: '352px',
