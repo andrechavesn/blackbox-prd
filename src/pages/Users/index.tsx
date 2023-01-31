@@ -1,13 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import * as Mui from '@mui/material';
 import { parseCookies } from 'nookies';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { IoSettingsSharp, IoTrash } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
 import Modal from '../../components/Modal';
 import { api } from '../../services/api/api';
 import { CreateUserModal } from '../../components/CreateUserModal';
+import { AuthContext } from '../../contexts/AuthContext';
 
 type Users = {
   id?: string;
@@ -21,11 +22,11 @@ export default function Users() {
   const [deleteUser, setDeleteUser] = useState(false);
   const [userId, setUserId] = useState<string>();
   const { push } = useRouter();
-  const [user, setUser] = useState({
-    id: null,
-    name: null,
-    roleId: null,
-  });
+  const { account } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (account && account?.primarygroupsid === 'admin') push('/Home');
+  }, [account]);
 
   const { 'blackbox.token': token } = parseCookies();
 
