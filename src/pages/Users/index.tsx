@@ -25,7 +25,7 @@ export default function Users() {
   const { account } = useContext(AuthContext);
 
   useEffect(() => {
-    if (account && account?.primarygroupsid === 'admin') push('/Home');
+    if (account && account?.primarygroupsid !== 'admin') push('/Home');
   }, [account]);
 
   const { 'blackbox.token': token } = parseCookies();
