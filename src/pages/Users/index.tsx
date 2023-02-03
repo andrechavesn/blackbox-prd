@@ -5,7 +5,7 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { IoSettingsSharp, IoTrash } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
-import Modal from '../../components/Modal';
+import { Modal } from '../../components/Modal';
 import { api } from '../../services/api/api';
 import { CreateUserModal } from '../../components/CreateUserModal';
 import { AuthContext } from '../../contexts/AuthContext';

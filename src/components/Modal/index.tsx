@@ -25,12 +25,7 @@ interface ResponsiveDialogProps {
     | 'createUser'
     | 'updateUser'
     | 'deleteUser';
-  initialValues?: {
-    name?: string;
-    url?: string;
-    password?: string;
-    roleId?: string;
-  };
+  selectedChannel?: any;
   userId?: string;
   refetch?: () => void;
 }
@@ -71,20 +66,26 @@ export const inputStyle = {
     },
   },
 };
-function ResponsiveDialog({
+export function Modal({
   isOpen,
   onCloseRequest,
   content,
   id,
   userId,
   fn,
-  initialValues,
+  selectedChannel,
   refetch,
 }: ResponsiveDialogProps) {
   const [roles, setRoles] = useState<Roles[]>([]);
+
   const { handleSubmit, register } = useForm();
 
   const { 'blackbox.token': token } = parseCookies();
+  const [selected, setSelected] = useState<any>();
+
+  useEffect(() => {
+    setSelected(selectedChannel);
+  }, [selectedChannel]);
 
   useEffect(() => {
     const handleRoles = async () => {
@@ -129,6 +130,8 @@ function ResponsiveDialog({
         onCloseRequest();
         refetch();
       }
+
+      // verify if channel already exists
     } catch (error) {
       console.log(error);
     }
@@ -156,8 +159,8 @@ function ResponsiveDialog({
       const response = await api.put(
         `/Channel`,
         {
-          name: data.name,
-          url: data.url,
+          name: data.name ? data.name : selected.name,
+          url: data.url ? data.url : selected.url,
           id,
         },
         {
@@ -333,16 +336,21 @@ function ResponsiveDialog({
               label="Name"
               {...register('name')}
               variant="outlined"
-              defaultValue={initialValues?.name}
+              value={selected?.name}
+              defaultValue={selected?.name}
+              onChange={e => setSelected({ ...selected, name: e.target.value })}
               size="small"
               sx={inputStyle}
             />
+
             <Mui.TextField
               label="Url"
               {...register('url')}
               variant="outlined"
               size="small"
-              defaultValue={initialValues?.url}
+              value={selected?.url}
+              defaultValue={selected?.url}
+              onChange={e => setSelected({ ...selected, url: e.target.value })}
               sx={inputStyle}
             />
 
@@ -411,7 +419,6 @@ function ResponsiveDialog({
                     control={<Mui.Radio required />}
                     label={role.name}
                     {...register('roleId')}
-                    onClick={() => console.log(role.id)}
                   />
                 );
               })}
@@ -480,5 +487,3 @@ function ResponsiveDialog({
     </Mui.Box>
   );
 }
-
-export default React.memo(ResponsiveDialog);

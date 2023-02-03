@@ -1,15 +1,12 @@
 import { ReactElement, useContext, useState } from 'react';
 import * as Mui from '@mui/material';
-import { useRouter } from 'next/router';
 import { Channels } from './Channels';
 import {
   Main,
   Container,
   Header,
   TitleBox,
-  Title,
   Content,
-  Logo,
   ButtonsBox,
 } from './styles';
 import { AuthContext } from '../../contexts/AuthContext';

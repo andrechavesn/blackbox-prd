@@ -27,7 +27,14 @@ export function RoleSelect({ userId, channelList }: RoleSelectProps) {
   const { 'blackbox.token': token } = parseCookies();
   useEffect(() => {
     if (channelList !== undefined) {
-      setSelectedChannel(channelList);
+      const filteredChannels = channels.filter((channel: any) => {
+        if (selectedChannel.find((x: any) => x.id === channel.id)) {
+          return false;
+        }
+        return true;
+      });
+
+      setSelectedChannel(filteredChannels);
     }
   }, [channelList]);
 
@@ -40,9 +47,16 @@ export function RoleSelect({ userId, channelList }: RoleSelectProps) {
           },
         });
 
-        if (response.status === 200) {
-          setChannels(response.data.value);
-        }
+        // verify if the channel is already selected
+        const filteredChannels = response.data.value.filter((channel: any) => {
+          if (selectedChannel.find((x: any) => x.id === channel.id)) {
+            return false;
+          }
+          return true;
+        });
+
+        setChannels(filteredChannels);
+
         setLoading(false);
       } catch (err) {
         toast.error('Error loading channels');
@@ -109,6 +123,8 @@ export function RoleSelect({ userId, channelList }: RoleSelectProps) {
   return (
     <Autocomplete
       clearIcon={false}
+      // remove remove all button
+      disableClearable
       multiple
       sx={{
         width: '352px',
@@ -127,6 +143,17 @@ export function RoleSelect({ userId, channelList }: RoleSelectProps) {
             channelid: value[value.length - 1]?.id,
             userid: userId,
           });
+          if (
+            selectedChannel.find(
+              (channel: any) => channel.id === value[value.length - 1]?.id,
+            )
+          ) {
+            setChannels(
+              channels.filter(
+                channel => channel.id !== value[value.length - 1]?.id,
+              ),
+            );
+          }
         }
         if (reason === 'removeOption') {
           handleRemoveRelation({
